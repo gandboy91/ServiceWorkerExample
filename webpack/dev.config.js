@@ -22,7 +22,8 @@ module.exports = merge(baseConfig, {
         inline: true,
         contentBase: 'src',
         historyApiFallback: true,
-        port: '3030',
+        host: '0.0.0.0',
+        port: '3040',
     },
     plugins: [
         new HtmlWebpackPlugin({
