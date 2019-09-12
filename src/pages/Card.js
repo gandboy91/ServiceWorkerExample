@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
-import {changeCard, removeCard} from "../actions/cards"
+import { changeCardRequest, removeCardRequest } from "../actions/cards"
 import {getCard} from "../selectors/cards";
 import Card from "../components/Card";
 
 const mapDispatchToProps = {
-    changeCard,
-    removeCard
+    changeCardRequest,
+    removeCardRequest
 }
 
 const mapStateToProps = (state, props) => ({

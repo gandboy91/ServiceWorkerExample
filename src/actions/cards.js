@@ -24,17 +24,25 @@ export const likeCardsSuccess = (id, likes) => ({
     }
 })
 
-export const CHANGE_CARD = 'CHANGE_CARD'
-export const changeCard = (id, card) => ({
-    type: CHANGE_CARD,
+export const ADD_CARD_REQUEST = 'ADD_CARD'
+export const addCardRequest = (card) => ({
+    type: ADD_CARD_REQUEST,
+    payload: {
+        card
+    }
+})
+
+export const CHANGE_CARD_REQUEST = 'CHANGE_CARD_REQUEST'
+export const changeCardRequest = (id, card) => ({
+    type: CHANGE_CARD_REQUEST,
     payload: {
         id,
         card
     }
 })
 
-export const REMOVE_CARD = 'REMOVE_CARD'
-export const removeCard = id => ({
-    type: REMOVE_CARD,
+export const REMOVE_CARD_REQUEST = 'REMOVE_CARD_REQUEST'
+export const removeCardRequest = id => ({
+    type: REMOVE_CARD_REQUEST,
     payload: id
 })

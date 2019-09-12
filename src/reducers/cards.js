@@ -1,5 +1,5 @@
 import {START_FETCHING, STOP_FETCHING} from "../actions";
-import {CHANGE_CARD, REMOVE_CARD, FETCH_CARDS_REQUEST, FETCH_CARDS_SUCCESS, LIKE_CARD_SUCCESS} from "../actions/cards";
+import {CHANGE_CARD_REQUEST, REMOVE_CARD, FETCH_CARDS_REQUEST, FETCH_CARDS_SUCCESS, LIKE_CARD_SUCCESS} from "../actions/cards";
 import {CURRENT_USER_REQUEST} from "../actions/user";
 
 const initialState = {
@@ -37,7 +37,7 @@ export default function cards(state = initialState, action) {
                 ...state,
                 isProcessing: false
             }
-        case CHANGE_CARD:
+        case CHANGE_CARD_REQUEST:
             return {
                 ...state,
                 cards: {

@@ -15,8 +15,9 @@ import { createStore, applyMiddleware } from 'redux'
 import PrivateRoute from './components/common/PrivateRoute'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import './styles/app.css'
-import {ADMIN_ACCESS_LEVEL} from "./constants/access";
-import Card from "./pages/Card";
+import {ADMIN_ACCESS_LEVEL} from "./constants/access"
+import Card from './pages/Card'
+import NewCard from './pages/NewCard'
 
 const reducer = combineReducers({
     user,
@@ -51,6 +52,7 @@ const App = React.memo(props => {
                         <UserBarContainer />
                         <Switch>
                             <PrivateRoute path="/" exact component={MainPage} />
+                            <PrivateRoute path="/cards/new" exact requiredAccessLevel={ADMIN_ACCESS_LEVEL} component={NewCard} />
                             <PrivateRoute path="/cards/:id" requiredAccessLevel={ADMIN_ACCESS_LEVEL}  component={Card} />
                             <PrivateRoute path="/users/:id" component={UserPage} />
                             <PrivateRoute path="/forbidden" component={Forbidden} />

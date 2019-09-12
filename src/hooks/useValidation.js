@@ -15,13 +15,16 @@ export default function useValidation(fieldValidators) {
         const invalid = []
         try {
             for (const field in fieldValidators) {
-                !fieldValidators[field].validate(fields[field]) && invalid.push(field)
+                const validator = fieldValidators[field]
+                if (!validator.validate(fields[field])) {
+                    invalid[field] = validator.getError()
+                }
             }
         } catch (e) {
             console.warn(e.message)
         }
         setInvalidFields(invalid)
-        return !invalid.length
+        return !Object.keys(invalid).length
     }
 
     return {
