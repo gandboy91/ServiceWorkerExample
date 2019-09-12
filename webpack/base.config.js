@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        main: "./src/index.js"
+        main: "./src/index.js",
     },
 
     module: {
@@ -28,7 +28,7 @@ module.exports = {
     plugins: [
         new webpack.EnvironmentPlugin(['NODE_ENV']),
         new HtmlWebpackPlugin({
-            template: './src/index.html'
+            template: './src/index.html',
         })
     ],
 };

@@ -8,7 +8,7 @@ const baseConfig = require('./base.config.js');
 module.exports = merge(baseConfig, {
     output: {
         path: path.join(process.cwd(), 'build'),
-        filename: "[name].[chunkhash:8].js"
+        filename: '[name].js'
     },
 
     module: {
@@ -24,7 +24,9 @@ module.exports = merge(baseConfig, {
     },
 
     plugins: [
-        new CleanWebpackPlugin(),
-        new ExtractTextPlugin({filename: 'style.[chunkhash:8].css'}),
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ['main.js', 'style.css', 'index.html'],
+        }),
+        new ExtractTextPlugin({filename: 'style.css'}),
     ]
 });

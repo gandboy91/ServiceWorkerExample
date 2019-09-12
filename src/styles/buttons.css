@@ -1,0 +1,21 @@
+.addButton {
+    color: #ddd;
+    cursor: pointer;
+    text-align: center;
+    background: rgba(255,255,255, 0.2);
+    font-size: 220px;
+}
+
+.addButton:hover {
+    color: white;
+    text-decoration: none
+}
+
+.faIcon {
+    color: #6c757d;
+    cursor: pointer;
+}
+
+.faIcon:hover {
+    color: #4e555b;
+}

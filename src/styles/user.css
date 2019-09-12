@@ -1,0 +1,7 @@
+.loginForm {
+    border: none;
+    margin: 30px auto;
+    max-width: 480px;
+    border-radius: 5px;
+    min-height: 200px;
+}

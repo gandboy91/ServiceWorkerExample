@@ -1,6 +1,6 @@
 importScripts('crypto.js');
 
-const urlsToPreCache = ['/', '/sw.js', '/index.html', '/main.js', '/crypto.js'];
+const urlsToPreCache = ['/', '/index.html', '/main.js', '/style.css', '/crypto.js', '/noveo.ico'];
 
 const postRegexpToSave = [
   /api\/v1\/login\/?$/,

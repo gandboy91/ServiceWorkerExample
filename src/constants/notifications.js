@@ -1,0 +1,1 @@
+export const WRONG_RESPONSE_FORMAT = 'Wrong response format'
