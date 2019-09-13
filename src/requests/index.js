@@ -18,7 +18,7 @@ const getDefaultRequestOptions = (token = null) => ({
 
 const processRawResponse = response => Promise.resolve(response.json())
 
-const processResponse = ({ success, errors = [], data = {} }) => success
+const processResponse = ({ success, errors = [], data = {}, offline = false }) => success
         ? Promise.resolve(data)
         : Promise.reject(errors)
 
@@ -47,12 +47,12 @@ const getRequest = ({ url, params = null, token = '' }) => {
     .catch(processErrors)
 }
 
-const postRequest = ({ url, params = null, token = '' }) => fetch (
+const postRequest = ({ url, body = null, token = '' }) => fetch (
     `${REST_API_BASE_URL}/${url}`,
     {
             ...getDefaultRequestOptions(token),
             method: "POST",
-            body: params ? JSON.stringify(params) : {}
+            body: body ? JSON.stringify(body) : {}
         }
     )
     .then(processRawResponse)

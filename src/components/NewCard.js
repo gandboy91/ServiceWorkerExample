@@ -27,8 +27,10 @@ const NewCard = ({ addCardRequest, fieldsValidators }) => {
     const getError = useCallback(field => invalidFields[field] || '', [invalidFields])
     const saveHandler = useCallback(() => {
        if (validate({ title, text })) {
-           addCardRequest({ title, text })
-           setComplete(true)
+           addCardRequest({
+               card: { title, content: text },
+               onSuccess: setComplete
+           })
        }
     },[title, text])
 

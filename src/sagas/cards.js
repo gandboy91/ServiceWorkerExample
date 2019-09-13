@@ -1,7 +1,13 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects'
 import {startFetching, stopFetching} from "../actions"
-import {FETCH_CARDS_REQUEST, fetchCardsSuccess, LIKE_CARD_REQUEST, likeCardsSuccess} from "../actions/cards";
-import {getCards, like} from "../requests/cards";
+import {
+    ADD_CARD_REQUEST,
+    FETCH_CARDS_REQUEST,
+    fetchCardsSuccess,
+    LIKE_CARD_REQUEST,
+    likeCardsSuccess
+} from '../actions/cards';
+import { getCards, like, saveCard } from '../requests/cards';
 import {getPreparedCards} from "../helpers/cards";
 
 function* cardsFetchWorker() {
@@ -25,10 +31,20 @@ function* likeCardWorker({ payload: likedId }) {
     }
 }
 
+function* saveCardWorker({ payload, onSuccess }) {
+    try {
+        yield call(saveCard, payload)
+        yield call(onSuccess, true)
+    } catch (error) {
+        console.warn(error.message || error)
+    }
+}
+
 function* cardsWatcher() {
     yield all([
         takeLatest(FETCH_CARDS_REQUEST, cardsFetchWorker),
         takeLatest(LIKE_CARD_REQUEST, likeCardWorker),
+        takeLatest(ADD_CARD_REQUEST, saveCardWorker)
     ])
 }
 
