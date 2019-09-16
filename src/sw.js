@@ -1,10 +1,15 @@
 importScripts('crypto.js');
 
-const urlsToPreCache = ['/', '/index.html', '/main.js', '/style.css', '/crypto.js', '/noveo.ico'];
-
-const postRegexpToSave = [
-  /api\/v1\/login\/?$/,
+const urlsToPreCache = [
+  '/',
+  '/index.html',
+  '/main.js',
+  '/style.css',
+  '/crypto.js',
+  '/noveo.ico',
 ];
+
+const postRegexpToSave = [/api\/v1\/login\/?$/];
 
 const STATIC_CACHE = 'staticCache';
 const DYNAMIC_CACHE = 'dynamicCache';
@@ -66,9 +71,8 @@ const buildResponse = (request) =>
  * For limiting no root requests in SPA (like get `/login`)
  * Usually it's server job, but in our case.. I'm too lazy to set up server with complex config
  */
-const buildLimitingGetResponse = () => new Promise(
-    (resolve, reject) => setTimeout(resolve, 1000, new Response())
-)
+const buildLimitingGetResponse = () =>
+    new Promise((resolve, reject) => setTimeout(resolve, 1000, new Response()));
 
 /**
  * makes hash from blob
@@ -207,9 +211,7 @@ const savePostIfNeed = (request, response) =>
                   console.warn('unable to save');
                   return resolve(null);
                 };
-                objectRequest.onsuccess = (event) => {
-                  return resolve(response);
-                };
+                objectRequest.onsuccess = (event) => resolve(response);
               });
             })
             .catch(() => resolve(null));
@@ -245,9 +247,6 @@ self.addEventListener('fetch', (event) => {
   }
 
   return event.respondWith(
-      Promise.race([
-          buildResponse(request),
-          buildLimitingGetResponse(),
-      ])
+      Promise.race([buildResponse(request), buildLimitingGetResponse()])
   );
 });
