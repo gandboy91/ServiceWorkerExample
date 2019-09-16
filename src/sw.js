@@ -63,6 +63,14 @@ const buildResponse = (request) =>
     });
 
 /**
+ * For limiting no root requests in SPA (like get `/login`)
+ * Usually it's server job, but in our case.. I'm too lazy to set up server with complex config
+ */
+const buildLimitingGetResponse = () => new Promise(
+    (resolve, reject) => setTimeout(resolve, 1000, new Response())
+)
+
+/**
  * makes hash from blob
  * @param blob
  * @return {Promise}
@@ -74,11 +82,11 @@ const makeBlobHash = (blob) =>
         const { result } = event.target;
         const hash = String(CryptoJS.SHA256(result));
         console.log(hash);
-        resolve(hash);
+        return resolve(hash);
       };
       reader.onerror = (err) => {
         console.log(err);
-        resolve('');
+        return resolve('');
       };
       reader.readAsBinaryString(blob);
     });
@@ -94,7 +102,7 @@ const makeRequestHash = (request) =>
       const { url } = clonedRequest;
       clonedRequest.json().then((body) => {
         const hash = String(CryptoJS.SHA256(JSON.stringify(body)));
-        resolve(hash);
+        return resolve(hash);
       });
     });
 
@@ -107,16 +115,16 @@ const getDb = () =>
       const createDb = indexedDB.open('test');
       createDb.onerror = (event) => {
         console.log('failed to open Idb');
-        reject(event);
+        return reject(event);
       };
       createDb.onsuccess = (event) => {
         const db = event.target.result;
-        resolve(db);
+        return resolve(db);
       };
       createDb.onupgradeneeded = (event) => {
         const db = event.target.result;
         db.createObjectStore('posts', { keyPath: 'hash' });
-        resolve(db);
+        return resolve(db);
       };
     });
 
@@ -129,7 +137,7 @@ const getObjectStore = () =>
       getDb()
           .then((db) => {
             const tx = db.transaction(['posts'], 'readwrite');
-            resolve(tx.objectStore('posts'));
+            return resolve(tx.objectStore('posts'));
           })
           .catch(reject);
     });
@@ -144,14 +152,14 @@ const getPostIfNeed = (request) =>
     new Promise((resolve, reject) => {
       const clonedRequest = request.clone();
       if (!isPostToSave(request.url)) {
-        resolve(null);
+        return resolve(null);
       }
       makeRequestHash(clonedRequest).then((hash) => {
         getObjectStore().then((store) => {
           const objectRequest = store.get(hash);
           objectRequest.onerror = (event) => {
             console.warn('error while saving');
-            resolve(null);
+            return resolve(null);
           };
           objectRequest.onsuccess = (event) => {
             const { result } = objectRequest;
@@ -159,7 +167,7 @@ const getPostIfNeed = (request) =>
               return resolve(null);
             }
             const response = buildResponseFromDbRecord(result);
-            resolve(response);
+            return resolve(response);
           };
         });
       });
@@ -184,7 +192,7 @@ const savePostIfNeed = (request, response) =>
     new Promise((resolve, reject) => {
       const { url } = request;
       if (!isPostToSave(url) || !response || !(response instanceof Response)) {
-        resolve(null);
+        return resolve(null);
       }
 
       const contentType = response.headers.get('Content-Type') || '';
@@ -196,11 +204,11 @@ const savePostIfNeed = (request, response) =>
                 const objectRequest = store.put({ url, blob, hash, contentType });
                 console.log('saving');
                 objectRequest.onerror = (event) => {
-                  resolve(null);
                   console.warn('unable to save');
+                  return resolve(null);
                 };
                 objectRequest.onsuccess = (event) => {
-                  resolve(response);
+                  return resolve(response);
                 };
               });
             })
@@ -236,5 +244,10 @@ self.addEventListener('fetch', (event) => {
     return event.respondWith(buildPostResponse(request));
   }
 
-  return event.respondWith(buildResponse(request));
+  return event.respondWith(
+      Promise.race([
+          buildResponse(request),
+          buildLimitingGetResponse(),
+      ])
+  );
 });
