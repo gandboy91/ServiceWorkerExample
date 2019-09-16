@@ -1,5 +1,5 @@
 import { SET_CONNECTION_STATUS } from "../actions/connection"
-import { STATUS_OFFLINE, STATUS_ONLINE } from 'src/constants/connection';
+import { STATUS_OFFLINE, STATUS_ONLINE } from '../constants/connection';
 
 const initialState = {
   status: navigator.onLine ? STATUS_ONLINE : STATUS_OFFLINE
