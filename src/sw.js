@@ -9,10 +9,25 @@ const urlsToPreCache = [
   '/noveo.ico',
 ];
 
+const LOGIN_REGEXP = /api\/v1\/login\/?$/;
+
 const postRegexpToSave = [/api\/v1\/login\/?$/];
 
 const STATIC_CACHE = 'staticCache';
 const DYNAMIC_CACHE = 'dynamicCache';
+
+const pushOnlineNotification = () => {
+  self.registration.showNotification('Online again!', {
+        body: `You're online! You've made some changes in offline. Do you wanna synchronize?`,
+        icon: '/happyCat.png',
+        image: '/happyCat.png',
+        requireInteraction: true,
+        actions: [
+          { action: 'yes', title: 'sync' },
+          { action: 'no', title: 'close' },
+        ],
+      })
+};
 
 const buildHeaders = (contentType) => ({ 'Content-Type': contentType });
 

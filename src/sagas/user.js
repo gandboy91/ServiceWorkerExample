@@ -17,6 +17,7 @@ import {TOKEN_STORAGE_KEY, USER_STORAGE_KEY} from "../constants/storage"
 import {startFetching, stopFetching} from "../actions"
 import {AUTH_ERROR_KEY} from "../constants/validation";
 import {getToken} from "../selectors/user";
+import { requestNotificationsPermission } from '../helpers/notifications';
 
 function* logOutWorker() {
     saveToStorage(TOKEN_STORAGE_KEY, '')
@@ -25,6 +26,7 @@ function* logOutWorker() {
 
 function* authorizeWorker({ payload: { email, password } }) {
     try {
+        yield call(requestNotificationsPermission)
         yield put(startFetching)
         const { token } = yield call(login, { email, password })
         saveToStorage(TOKEN_STORAGE_KEY, token || '')
