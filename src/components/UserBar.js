@@ -4,8 +4,9 @@ import {
     LoginRedirectButton,
     LogoutButton,
 } from './forms/buttons';
+import { STATUS_ONLINE } from '../constants/connection';
 
-const UserBar = React.memo(({ user: { name, id }, logoutRequest }) => {
+const UserBar = React.memo(({ user: { name, id }, connectionStatus, logoutRequest }) => {
     const handleLogout = useCallback(() => logoutRequest(), []);
     const buttonProps = {
         style: { color: 'white' },
@@ -23,7 +24,7 @@ const UserBar = React.memo(({ user: { name, id }, logoutRequest }) => {
                 <span className="text-light">{id ? `you logged in as ${name}` : `you haven't logged in`}</span>
             </div>
             <div className="navbar-brand">
-                <ConnectionStatusButton isOnline />
+                <ConnectionStatusButton isOnline={connectionStatus === STATUS_ONLINE} />
             </div>
         </nav>
     );

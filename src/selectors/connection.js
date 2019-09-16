@@ -1,0 +1,1 @@
+export const selectConnectionStatus = ({ connection }) => connection.status
