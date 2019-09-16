@@ -10,3 +10,7 @@ export const LogoutButton = ({ handleLogout, ...props }) => <button className='b
 export const LoginRedirectButton = ({ loginUrl, ...props }) => <Link to={loginUrl} className='btn btn-link' >
     <FontAwesomeIcon icon={faSignInAlt} {...props} />
 </Link>
+
+export const ConnectionStatusButton = ({ isOnline }) => isOnline
+    ? <div className="btn btn-success">online</div>
+    : <div className="btn btn-warning">offline</div>
