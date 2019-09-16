@@ -11,6 +11,7 @@ import MainPage from './pages/Main'
 import UserBarContainer from './containers/UserBarContainer'
 import user from './reducers/user'
 import cards from './reducers/cards'
+import connection from './reducers/connection'
 import { createStore, applyMiddleware } from 'redux'
 import PrivateRoute from './components/common/PrivateRoute'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
@@ -21,6 +22,7 @@ import NewCard from './pages/NewCard'
 
 const reducer = combineReducers({
     user,
+    connection,
     cards
 })
 
