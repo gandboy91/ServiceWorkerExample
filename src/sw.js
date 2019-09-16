@@ -245,6 +245,7 @@ self.addEventListener('install', (event) =>
           ),
           caches.open(STATIC_CACHE).then((cache) => {
             console.log('Opened cache');
+            pushOnlineNotification();
             return cache.addAll(urlsToPreCache);
           }),
         ])
