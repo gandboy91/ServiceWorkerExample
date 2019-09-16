@@ -7,6 +7,9 @@ const urlsToPreCache = [
   '/style.css',
   '/crypto.js',
   '/noveo.ico',
+  '/noveo.png',
+  '/happyCat.png',
+  '/sadCat.png',
 ];
 
 const LOGIN_REGEXP = /api\/v1\/login\/?$/;
@@ -16,17 +19,29 @@ const postRegexpToSave = [/api\/v1\/login\/?$/];
 const STATIC_CACHE = 'staticCache';
 const DYNAMIC_CACHE = 'dynamicCache';
 
+const processRequest = (event) => {
+  console.log('feeetch');
+  const { request } = event;
+
+  if (request.method === 'POST') {
+    return event.respondWith(buildPostResponse(request));
+  }
+
+  return event.respondWith(
+      Promise.race([buildResponse(request), buildLimitingGetResponse()])
+  );
+}
+
 const pushOnlineNotification = () => {
   self.registration.showNotification('Online again!', {
-        body: `You're online! You've made some changes in offline. Do you wanna synchronize?`,
-        icon: '/happyCat.png',
-        image: '/happyCat.png',
-        requireInteraction: true,
-        actions: [
-          { action: 'yes', title: 'sync' },
-          { action: 'no', title: 'close' },
-        ],
-      })
+    body: `You're online! You've made some changes in offline. Do you wanna synchronize?`,
+    icon: '/happyCat.png',
+    requireInteraction: true,
+    actions: [
+      { action: 'yes', title: 'sync' },
+      { action: 'no', title: 'close' },
+    ],
+  })
 };
 
 const buildHeaders = (contentType) => ({ 'Content-Type': contentType });
@@ -47,6 +62,7 @@ const buildPostResponse = (request) =>
       const clonedRequest = request.clone();
       getPostIfNeed(request).then((postCachedResponse) => {
         if (postCachedResponse) {
+          pushOnlineNotification();
           return resolve(postCachedResponse);
         }
         fetch(request).then((response) => {
@@ -245,7 +261,6 @@ self.addEventListener('install', (event) =>
           ),
           caches.open(STATIC_CACHE).then((cache) => {
             console.log('Opened cache');
-            pushOnlineNotification();
             return cache.addAll(urlsToPreCache);
           }),
         ])
@@ -253,16 +268,16 @@ self.addEventListener('install', (event) =>
 );
 
 /**
+ * @important !!!
+ * When service worker is registered for first time or after unregister,
+ * we need to force client to work with OUR service worker.
+ * it also means that client would now generate events (like FetchEvent) in our serviceWorker
+ */
+self.addEventListener('activate', function(event) {
+  event.waitUntil(self.clients.claim());
+});
+
+/**
  * Fetch event handler
  */
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-
-  if (request.method === 'POST') {
-    return event.respondWith(buildPostResponse(request));
-  }
-
-  return event.respondWith(
-      Promise.race([buildResponse(request), buildLimitingGetResponse()])
-  );
-});
+self.addEventListener('fetch', processRequest)
