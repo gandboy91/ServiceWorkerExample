@@ -3,7 +3,7 @@ import { eventChannel } from 'redux-saga';
 import { setConnectionStatus } from '../actions/connection';
 import { STATUS_OFFLINE, STATUS_ONLINE } from '../constants/connection';
 import { callWorker } from '../helpers/postMessage';
-import { selectOfflineStats } from 'src/selectors/cards';
+import { selectOfflineStats } from '../selectors/cards';
 
 function connectionEventsChannel() {
   return eventChannel((emit) => {
