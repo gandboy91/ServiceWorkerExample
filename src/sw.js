@@ -80,7 +80,6 @@ const buildPostResponse = (request) =>
       const clonedRequest = request.clone();
       getPostIfNeed(request).then((postCachedResponse) => {
         if (postCachedResponse) {
-          pushOnlineNotification();
           return resolve(postCachedResponse);
         }
         fetch(request).then((response) => {
