@@ -9,6 +9,7 @@ import {
 } from '../actions/cards';
 import { getCards, like, saveCard } from '../requests/cards';
 import {getPreparedCards} from "../helpers/cards";
+import { selectConnectionStatus } from '../selectors/connection';
 
 function* cardsFetchWorker() {
     try {
@@ -33,7 +34,9 @@ function* likeCardWorker({ payload: likedId }) {
 
 function* saveCardWorker({ payload, onSuccess }) {
     try {
+        const status = yield select(selectConnectionStatus)
         yield call(saveCard, payload)
+        //тут добавление поста в стор и в онлайне и в оффлайне
         yield call(onSuccess, true)
     } catch (error) {
         console.warn(error.message || error)
