@@ -1,7 +1,11 @@
 importScripts('crypto.js');
 
+const happyCatImg = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQUFBAYFBQUHBgYHCQ8KCQgICRMNDgsPFhMXFxYTFRUYGyMeGBohGhUVHikfISQlJygnGB0rLismLiMmJyb/2wBDAQYHBwkICRIKChImGRUZJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJib/wAARCAAyADIDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAUDBAYCAQj/xAAzEAABAwMDAgQDBgcAAAAAAAABAgMEAAURBhIhMUETIlFhFYHBFEJxkaGxByMyQ1KC0f/EABUBAQEAAAAAAAAAAAAAAAAAAAAC/8QAFxEBAQEBAAAAAAAAAAAAAAAAAAECEf/aAAwDAQACEQMRAD8A+gdby5cazsswZCo0mdMYiJeQBubC3AFKGeMhO7HvUOn5s6Dd3tNXiSqU8Gy/BmLACpLOcKCsYG9BIBx1BSfWjXfDdiWeibzFz81EfWrmqLRIubEV+3vtxbnAfS/FfdSVJB6KSoAglKkkgjPp6UDqisz8N1k5y7qeCyT91i18D5qcNHwrV6RlGrIyz6O2tJH6LFBDfkuah1CnTjch9i3xGRIuK47hbWsqyGmgpPI6KUceiR3q5oWVJk6dabmuqelQ3nYbziuq1NOKRuPuQkH51NpizyLU1Ndny25lwnSVPyH22i2k8BKUhJJwAlIHU96oaMdbRddT27eA8zdFPeET5ghxtCgrHoSVc+xoNTRRRQZOG0NQavlzZHngWJwR4jR/pVJ2guOkdykKCR6eatHcJC40fc2kLdWtLbYUeNyjgZ9qz38PlEafefKSpT1ymrWR1z9ocH0Ap9LEaa0Yq3FJUogpKchSVA5BHuCKDM3K8amtOsbdbVWt2fZpLW6RckpSlDCyraEgDnuOuc59qdXJ+6PNXA2vHiQ2zsbAG593ZuCATwkcgZx3qSTBnvNErnpfdaBUwlbW1HiAeVSwDlWDg8Yqnp+Ne12uNNnTYzF0kNpMxMZoqYUrsUhRyCBgZzzjpQcaCu17u1ibd1HavhV1Rw9G3A7c8g8E4OO1Q65iqiR0aqgo2z7QC4sp6vx+rrSvUbckeigKex2mYDavEeU448vc46vlS1Y9vYAYrmepuTBkslO5txpaVFXAwUmguMuIeZQ82oKQ4kKSR3B5FFY3RtwkHSFjJBJNvj5Pr/LTRQWdGJDAvloKU+NCubykhQz5Hj4qVfh5yP8AU1pkMIRyACvsojOKQX623CNdW9R2JtL0xLQZlw1K2CW0CSAFdAtJJ2k8HJB65BF1rp5xQZmzPhEvoqNck/Z1g+27AV+KSRQNm5cho+HMiL3D+6wkrQr5DkfgR8zVCXPmwbWTFtr760qUM7cbU7jg4PJ47Ypi1dLY8nc1cYriT3S8kj969cudtaTucuEVCR3U8kD96KzZLLZ2OojDIhtI2KUCN2XB5iTySffJpVq6V8J01c5aQFrDCkMJI8ynVeVCR65UQKjl6000wstNXRqfI7R4GZLhPptRk/nVaJDueobnGud5iG326GvxYduWoKcW52dexwMfdQCcHknOACTiyWpu32W3wCMmLGbZJ9dqQPpRTOigKjkMMSGy3IZbeQeqXEhQ/I0UUGflaY02twlWnrWonuYbZ+leRtL6aS4CnT1rBz1ENv8A5RRQP40aNFR4caO0wj/FtASP0qaiigKKKKD/2Q==';
+const sadCatImg = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQUFBAYFBQUHBgYHCQ8KCQgICRMNDgsPFhMXFxYTFRUYGyMeGBohGhUVHikfISQlJygnGB0rLismLiMmJyb/2wBDAQYHBwkICRIKChImGRUZJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJib/wAARCAAyADIDASIAAhEBAxEB/8QAHAAAAgIDAQEAAAAAAAAAAAAAAAUEBgIDBwEI/8QAMRAAAQMDAwIEAwgDAAAAAAAAAQIDBAAFEQYSIUFREyIxYRSBkQcVFjJCcbHBRGKh/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APoPWk6ZDtTDVve+HlzpjMRt7aFFvesBSgDwSE7iM9a1aduM9m5ydO3t4PTmEeNGlBIT8WwTjcQOAtJ4UBxyD1xWGtztOn1n0TeY+fmFD+SKk6ptMucIU61LZautveDkdb2QhSTwttRHO1ST9QD0oHtFVkR9cucqutjj/wCqILrmPmXR/FHwmuEjKb5ZXD2VbXE/w9Qar8qVfNQI03DmyIUWMyJNwfjLKHPNkNNJUORkhSjjnCQOtTtETpM/TcdU5zxZkdbkWQvGN7jS1NlXz25+dZaWtMu2tTpFyfZkXG4SVPyHGElKPQJQlIPOAlIH1qFolaES9SQgtO9i7uq2Z5SHEoXnHuVGgtFFFFBU47f4h1dJkyCV26xOhmO1+lcraCtw99gUEjsSo9qsFzkusNstRgkyZLgaa3cgHBJUfYAE49qQ/Z4sDTrkhed0i4THFqx1+Ic9fkAKd3FsyQw5Edb+KjO+K0FK4UcEFJx3BIz0oOeaU1Br+R9oF8tF3sUiPZrelxTM91OEP4UNmDjB3JyePSj7Q9R68gX3T7GmrBIuNvuRw8+yOGPOkeY4wPJk5PGf2OegXGRdX7VJEe3obkeEra268MLOOE5GcA+menatGnpd4FhiPzbY2iS60HFRmHwoNE87NxxkDvQS7bIfU5IhyylUiMoArSMBxJGUqx06g+4NItaxvuwo1fBTslW4Aywn/Ii586VdykZUnsR7mncBp1p2TNnKbQ/KUPIlWQhKRhKc9epJ969uwZlWubGUPEbdjuIXxxgpIoJyFJWhK0EKSoZBHUUVWNHznnNJWRxZJUqAwST1JbTRQYaJHgxLvainL0C6SE7c48ri/FSf22uD6VZG4zaFhw+ZY69qQXyFcLdePxJZo5lqW0GZ8FKglUhCSSlaCePETk8H1BxngVJturdPz1+Ci5NR5Q/NElnwHkHsULwaBvMD6mFIjlIcUQNyvRIJ5PvxWFvafYjhh5QX4XlQscFSQBgkdD0+VbkvNLGUuoUO4UDQp1pIypxAHcqFB48y28BvTkj0PakerZX3Vpm6SsblojqSxj1W4obUJx3KiB8623LVenbcrw5F2jF8/ljsr8V1R7BCcqP0pbHj3HU9zi3C5Q3LdZ4Tgeiwn+HpDo/K44P0hPqlPrnk4wBQO7JbEW+ywIB5MWM2yT32pA/qimVFAVCutut9wjlE+DGlpA4S+0lY/wCiiig5xdtPWBp9YasdubGfRMVA/qsLXp+wuvpS7ZLe4M+ioqD/AFRRQdHtFsttvYAgW+LEB9QwylvP0FMKKKAooooP/9k=\n';
+
 const urlsToPreCache = [
   '/',
+  '/sw.js',
   '/index.html',
   '/main.js',
   '/style.css',
@@ -14,13 +18,13 @@ const urlsToPreCache = [
 
 const LOGIN_REGEXP = /api\/v1\/login\/?$/;
 
-const postRegexpToSave = [/api\/v1\/login\/?$/];
+const postRegexpsToSave = [LOGIN_REGEXP];
 
 const STATIC_CACHE = 'staticCache';
 const DYNAMIC_CACHE = 'dynamicCache';
 
 const processRequest = (event) => {
-  console.log('feeetch');
+  console.log('fetch');
   const { request } = event;
 
   if (request.method === 'POST') {
@@ -35,7 +39,7 @@ const processRequest = (event) => {
 const pushOnlineNotification = () => {
   self.registration.showNotification('Online again!', {
     body: `You're online! You've made some changes in offline. Do you wanna synchronize?`,
-    icon: '/happyCat.png',
+    icon: happyCatImg,
     requireInteraction: true,
     actions: [
       { action: 'yes', title: 'sync' },
@@ -214,7 +218,7 @@ const getPostIfNeed = (request) =>
  * @return {boolean}
  */
 const isPostToSave = (url) =>
-    !!url && postRegexpToSave.some((regexp) => regexp.test(url));
+    !!url && postRegexpsToSave.some((regexp) => regexp.test(url));
 
 /**
  * saves post body if post url matches regexps to save
@@ -281,3 +285,10 @@ self.addEventListener('activate', function(event) {
  * Fetch event handler
  */
 self.addEventListener('fetch', processRequest)
+
+/**
+ * postMessage handler
+ */
+self.addEventListener('message', ({ action = {} }) => {
+  console.log(action);
+});
