@@ -2,6 +2,7 @@ import { take, put, call } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import { setConnectionStatus } from '../actions/connection';
 import { STATUS_OFFLINE, STATUS_ONLINE } from '../constants/connection';
+import { callWorker } from '../helpers/postMessage';
 
 function connectionEventsChannel() {
   return eventChannel(emit => {
@@ -25,6 +26,7 @@ function* connectionWatcher() {
   try {
     while (true) {
       const { status } = yield take(channel)
+      yield call(callWorker, { a: 3, b: 2 })
       yield put(setConnectionStatus(status))
     }
   } catch (error) {
