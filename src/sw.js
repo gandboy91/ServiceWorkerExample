@@ -286,9 +286,6 @@ self.addEventListener('activate', function(event) {
  */
 self.addEventListener('fetch', processRequest)
 
-/**
- * postMessage handler
- */
-self.addEventListener('message', ({ action = {} }) => {
-  console.log(action);
+self.addEventListener('message', ({ data = {} }) => {
+  console.log(data);
 });
