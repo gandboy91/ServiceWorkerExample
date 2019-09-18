@@ -11,4 +11,4 @@ export const getCardsIds = createSelector(
     cards => Object.keys(cards).map( id => +id)
 )
 
-export const selectOfflineStats = (state) => {}
+export const selectOfflineStats = ({ cards }) => cards.cards

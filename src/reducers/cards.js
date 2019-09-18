@@ -4,6 +4,7 @@ import {CURRENT_USER_REQUEST} from "../actions/user";
 
 const initialState = {
     cards: {},
+    offlineCards: {},
     isProcessing: false,
 }
 

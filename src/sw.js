@@ -16,6 +16,9 @@ const urlsToPreCache = [
   '/sadCat.png',
 ];
 
+const OFFLINE_TYPE = 'offline';
+const ONLINE_TYPE = 'online';
+
 const LOGIN_REGEXP = /api\/v1\/login\/?$/;
 
 const postRegexpsToSave = [LOGIN_REGEXP];
@@ -44,6 +47,17 @@ const pushOnlineNotification = () => {
     actions: [
       { action: 'yes', title: 'sync' },
       { action: 'no', title: 'close' },
+    ],
+  })
+};
+
+const pushOfflineNotification = () => {
+  self.registration.showNotification('You are offline now :(', {
+    body: `You're offline.. We will try to make it not so painful for u..`,
+    icon: sadCatImg,
+    requireInteraction: true,
+    actions: [
+      { action: 'no, please no!', title: 'f.ck' },
     ],
   })
 };
@@ -287,5 +301,12 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', processRequest)
 
 self.addEventListener('message', ({ data = {} }) => {
-  console.log(data);
+  switch(data.type) {
+    case OFFLINE_TYPE:
+      return pushOfflineNotification()
+    case ONLINE_TYPE:
+      return pushOnlineNotification()
+    default:
+      return
+  }
 });
