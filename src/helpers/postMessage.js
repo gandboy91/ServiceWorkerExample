@@ -1,4 +1,6 @@
-export const requestNotificationsPermission = () =>
-  Notification && Notification.requestPermission().then(
-      (result) => console.log('notifications mode: ', result)
-)
+export const callWorker = (message) => {
+  if (!navigator.serviceWorker || !navigator.serviceWorker.controller) {
+    return
+  }
+  navigator.serviceWorker.controller.postMessage(message)
+}
