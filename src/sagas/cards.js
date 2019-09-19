@@ -1,4 +1,4 @@
-import { uniqueId } from 'lodash/uniqueId';
+import uniqueId from 'lodash/uniqueId';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { startFetching, stopFetching } from '../actions';
 import {
