@@ -35,10 +35,10 @@ const PreviewCard = React.memo(
           <div className="card previewCard shadow">
             <div className="card-header">
               <div className="row">
-                <div className="col-sm-10">
+                <div className="col-md-10 col-sm-8">
                   <h5>{title}</h5>
                 </div>
-                <div className="col-sm-2">
+                <div className="col-md-2 col-sm-4">
                   <FontAwesomeIcon size="2x" icon={faTimes} className="faIcon" onClick={handleRemove} />
                 </div>
               </div>
