@@ -11,6 +11,7 @@ import MainPage from './pages/Main'
 import UserBarContainer from './containers/UserBarContainer'
 import user from './reducers/user'
 import cards from './reducers/cards'
+import queue from './reducers/queue'
 import connection from './reducers/connection'
 import { createStore, applyMiddleware } from 'redux'
 import PrivateRoute from './components/common/PrivateRoute'
@@ -22,6 +23,7 @@ import NewCard from './pages/NewCard'
 
 const reducer = combineReducers({
     user,
+    queue,
     connection,
     cards
 })
