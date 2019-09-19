@@ -51,6 +51,17 @@ const isRoute = (request) => {
   return request.method === 'GET' && ROUTE_REGEXP.test(relativeUrl);
 };
 
+const queueOnSuccess = () => self.clients.matchAll({ type: 'window' })
+    .then(
+        clisents => clisents.map(
+            client => {
+              if ('navigate' in client) {
+                return client.navigate('/');
+              }
+            }
+        )
+    )
+
 /**
  * fetches all requests from queue
  */
@@ -65,7 +76,7 @@ const fetchQueue = () => {
               .json()
               .then(({ success }) =>
                   success
-                      ? console.log(`${method} ${url} request success!`)
+                      ? queueOnSuccess()
                       : console.warn(`${method} ${url} error :(`)
               )
       )
