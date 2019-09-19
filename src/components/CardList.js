@@ -9,7 +9,6 @@ import '../styles/buttons.css'
 const AddButton = (props) => <Link className='addButton previewCard shadow' to={'/cards/new'}>
     +
 </Link>
-)
 
 /**
  * List of card previews and adding new card button. Uses likes context
