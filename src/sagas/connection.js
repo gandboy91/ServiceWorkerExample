@@ -3,7 +3,9 @@ import { eventChannel } from 'redux-saga'
 import { setConnectionStatus } from '../actions/connection'
 import { STATUS_OFFLINE, STATUS_ONLINE } from '../constants/connection'
 import { callWorker } from '../helpers/postMessage'
-import { selectOfflineStats } from '../selectors/cards'
+import { selectQueue } from '../selectors/queue'
+import { getFromStorage } from '../helpers/storage';
+import { TOKEN_STORAGE_KEY } from '../constants/storage';
 
 function connectionEventsChannel() {
   return eventChannel((emit) => {
@@ -27,10 +29,11 @@ function* connectionWatcher() {
   try {
     while (true) {
       const { status } = yield take(channel)
-      const offlineStats = yield select(selectOfflineStats)
+      const queue = yield select(selectQueue)
+      const token = getFromStorage(TOKEN_STORAGE_KEY)
       yield call(callWorker, {
         type: status,
-        payload: status === STATUS_ONLINE ? offlineStats : {},
+        payload: status === STATUS_ONLINE ? { queue, token } : {},
       })
       yield put(setConnectionStatus(status))
     }

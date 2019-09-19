@@ -52,7 +52,7 @@ const postRequest = ({ url, body = null, token = '' }) => fetch (
     {
             ...getDefaultRequestOptions(token),
             method: "POST",
-            body: body ? JSON.stringify(body) : {}
+            body: body ? JSON.stringify(body) : '{}'
         }
     )
     .then(processRawResponse)
