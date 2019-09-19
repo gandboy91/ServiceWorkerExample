@@ -10,8 +10,8 @@ const PreviewOfflineCard = React.memo(({ card: { title, text } }) => {
     </div>
     <div className='card-body'>
       <div className='mb-2'>{text}</div>
-      <div className='d-flex justify-content-between p-3'>
-        Editing and likes are not available in offline mode
+      <div className='d-flex justify-content-between p-2 alert alert-warning'>
+        <small>Editing and likes are not available in offline mode</small>
       </div>
     </div>
   </div>
