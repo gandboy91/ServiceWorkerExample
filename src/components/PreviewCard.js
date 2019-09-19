@@ -24,7 +24,6 @@ const LikeCounter = React.memo(({ likes, onClick }) => <div>
  * Uses likes context
  */
 const PreviewCard = React.memo(({ card: {id, title, text, likes}, likeRequest, userRole }) => {
-    console.log('preview render');
     const handleLike = useCallback(() => likeRequest(id), [id])
 
     return <div className='card previewCard shadow'>
