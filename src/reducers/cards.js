@@ -64,7 +64,7 @@ export default function cards(state = initialState, action) {
             }
         case REMOVE_CARD_OFFLINE:
             const offlineCards = {...state.offlineCards}
-            delete cards[payload.id]
+            delete offlineCards[payload.id]
             return {
                 ...state,
                 offlineCards
