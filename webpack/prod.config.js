@@ -8,6 +8,7 @@ const baseConfig = require('./base.config.js');
 module.exports = merge(baseConfig, {
     output: {
         path: path.join(process.cwd(), 'build'),
+        publicPath: '/',
         filename: '[name].js'
     },
 
