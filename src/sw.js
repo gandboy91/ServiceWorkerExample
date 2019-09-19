@@ -1,4 +1,4 @@
-importScripts('crypto.js');
+importScripts('crypto.js')
 
 const happyCatImg =
     'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQUFBAYFBQUHBgYHCQ8KCQgICRMNDgsPFhMXFxYTFRUYGyMeGBohGhUVHikfISQlJygnGB0rLismLiMmJyb/2wBDAQYHBwkICRIKChImGRUZJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJib/wAARCAAyADIDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAUDBAYCAQj/xAAzEAABAwMDAgQDBgcAAAAAAAABAgMEAAURBhIhMUETIlFhFYHBFEJxkaGxByMyQ1KC0f/EABUBAQEAAAAAAAAAAAAAAAAAAAAC/8QAFxEBAQEBAAAAAAAAAAAAAAAAAAECEf/aAAwDAQACEQMRAD8A+gdby5cazsswZCo0mdMYiJeQBubC3AFKGeMhO7HvUOn5s6Dd3tNXiSqU8Gy/BmLACpLOcKCsYG9BIBx1BSfWjXfDdiWeibzFz81EfWrmqLRIubEV+3vtxbnAfS/FfdSVJB6KSoAglKkkgjPp6UDqisz8N1k5y7qeCyT91i18D5qcNHwrV6RlGrIyz6O2tJH6LFBDfkuah1CnTjch9i3xGRIuK47hbWsqyGmgpPI6KUceiR3q5oWVJk6dabmuqelQ3nYbziuq1NOKRuPuQkH51NpizyLU1Ndny25lwnSVPyH22i2k8BKUhJJwAlIHU96oaMdbRddT27eA8zdFPeET5ghxtCgrHoSVc+xoNTRRRQZOG0NQavlzZHngWJwR4jR/pVJ2guOkdykKCR6eatHcJC40fc2kLdWtLbYUeNyjgZ9qz38PlEafefKSpT1ymrWR1z9ocH0Ap9LEaa0Yq3FJUogpKchSVA5BHuCKDM3K8amtOsbdbVWt2fZpLW6RckpSlDCyraEgDnuOuc59qdXJ+6PNXA2vHiQ2zsbAG593ZuCATwkcgZx3qSTBnvNErnpfdaBUwlbW1HiAeVSwDlWDg8Yqnp+Ne12uNNnTYzF0kNpMxMZoqYUrsUhRyCBgZzzjpQcaCu17u1ibd1HavhV1Rw9G3A7c8g8E4OO1Q65iqiR0aqgo2z7QC4sp6vx+rrSvUbckeigKex2mYDavEeU448vc46vlS1Y9vYAYrmepuTBkslO5txpaVFXAwUmguMuIeZQ82oKQ4kKSR3B5FFY3RtwkHSFjJBJNvj5Pr/LTRQWdGJDAvloKU+NCubykhQz5Hj4qVfh5yP8AU1pkMIRyACvsojOKQX623CNdW9R2JtL0xLQZlw1K2CW0CSAFdAtJJ2k8HJB65BF1rp5xQZmzPhEvoqNck/Z1g+27AV+KSRQNm5cho+HMiL3D+6wkrQr5DkfgR8zVCXPmwbWTFtr760qUM7cbU7jg4PJ47Ypi1dLY8nc1cYriT3S8kj969cudtaTucuEVCR3U8kD96KzZLLZ2OojDIhtI2KUCN2XB5iTySffJpVq6V8J01c5aQFrDCkMJI8ynVeVCR65UQKjl6000wstNXRqfI7R4GZLhPptRk/nVaJDueobnGud5iG326GvxYduWoKcW52dexwMfdQCcHknOACTiyWpu32W3wCMmLGbZJ9dqQPpRTOigKjkMMSGy3IZbeQeqXEhQ/I0UUGflaY02twlWnrWonuYbZ+leRtL6aS4CnT1rBz1ENv8A5RRQP40aNFR4caO0wj/FtASP0qaiigKKKKD/2Q==';
@@ -18,31 +18,33 @@ const urlsToPreCache = [
   '/noveo.png',
   '/happyCat.png',
   '/sadCat.png',
-];
+]
 
-let queue = [];
+let queue = []
 
-const OFFLINE_TYPE = 'offline';
-const ONLINE_TYPE = 'online';
+const NO_CACHE_METHODS = ['DELETE', 'PUT']
 
-const ROUTE_REGEXP = /^([\w]+\/?)+$/;
+const OFFLINE_TYPE = 'offline'
+const ONLINE_TYPE = 'online'
 
-const LOGIN_REGEXP = /api\/v1\/login\/?$/;
+const ROUTE_REGEXP = /^([\w]+\/?)+$/
 
-const postRegexpsToSave = [LOGIN_REGEXP];
+const LOGIN_REGEXP = /api\/v1\/login\/?$/
 
-const STATIC_CACHE = 'staticCache';
-const DYNAMIC_CACHE = 'dynamicCache';
+const postRegexpsToSave = [LOGIN_REGEXP]
+
+const STATIC_CACHE = 'staticCache'
+const DYNAMIC_CACHE = 'dynamicCache'
 
 const isRoute = (request) => {
-  const { url } = request;
-  const relativeUrl = url.replace(self.registration.scope, '');
-  return request.method === 'GET' && ROUTE_REGEXP.test(relativeUrl);
-};
+  const { url } = request
+  const relativeUrl = url.replace(self.registration.scope, '')
+  return request.method === 'GET' && ROUTE_REGEXP.test(relativeUrl)
+}
 
 const fetchQueue = () => {
-  console.log(queue);
-};
+  console.log(queue)
+}
 
 /**
  * Fetch event handler. Works as a proxy for requests.
@@ -50,16 +52,16 @@ const fetchQueue = () => {
  * all GET requests are processing in race with limiting request (1 sec)
  */
 const processRequest = (event) => {
-  const { request } = event;
+  const { request } = event
 
   if (request.method === 'POST') {
-    return event.respondWith(buildPostResponse(request));
+    return event.respondWith(buildPostResponse(request))
   }
 
   return event.respondWith(
       Promise.race([buildResponse(request), buildLimitingGetResponse()])
-  );
-};
+  )
+}
 
 const pushWarningNotification = () =>
     self.registration.showNotification('say it to me asshole!', {
@@ -67,7 +69,7 @@ const pushWarningNotification = () =>
       icon: angryCat,
       requireInteraction: true,
       actions: [{ action: 'assh', title: 'yes, I am asshole' }],
-    });
+    })
 
 const pushOnlineNotification = ({ payload }) =>
     self.registration.showNotification('Online again!', {
@@ -78,7 +80,7 @@ const pushOnlineNotification = ({ payload }) =>
         { action: 'sync', title: 'synchronize please!' },
         { action: 'fck', title: 'f.ck' },
       ],
-    });
+    })
 
 const pushOfflineNotification = () =>
     self.registration.showNotification('You are offline now :(', {
@@ -89,14 +91,14 @@ const pushOfflineNotification = () =>
         { action: 'fck', title: 'f.ck' },
         { action: 'ok', title: 'no problem' },
       ],
-    });
+    })
 
-const buildHeaders = (contentType) => ({ 'Content-Type': contentType });
+const buildHeaders = (contentType) => ({ 'Content-Type': contentType })
 
 const buildResponseFromDbRecord = ({ blob, contentType }) =>
     new Response(blob, {
       headers: buildHeaders(contentType),
-    });
+    })
 
 /**
  * Builds response for POST requests with Indexed db.
@@ -106,23 +108,23 @@ const buildResponseFromDbRecord = ({ blob, contentType }) =>
  */
 const buildPostResponse = (request) =>
     new Promise((resolve, reject) => {
-      const clonedRequest = request.clone();
+      const clonedRequest = request.clone()
       fetch(request)
           .then((response) => {
-            const clonedResponse = response.clone();
+            const clonedResponse = response.clone()
             savePostIfNeed(clonedRequest, clonedResponse).then(() =>
                 resolve(response)
-            );
+            )
           })
           .catch((error) => {
             getPostIfNeed(clonedRequest).then((postCachedResponse) => {
               if (postCachedResponse) {
-                return resolve(postCachedResponse);
+                return resolve(postCachedResponse)
               }
-              reject(error);
-            });
-          });
-    });
+              reject(error)
+            })
+          })
+    })
 
 /**
  * Builds response for given request using cache.
@@ -134,30 +136,33 @@ const buildResponse = (request) =>
     new Promise((resolve, reject) => {
       fetch(request)
           .then((response) => {
-            const responseToCache = response.clone();
+            if (NO_CACHE_METHODS.includes(request.method)) {
+              return resolve(response)
+            }
+            const responseToCache = response.clone()
             caches.open(DYNAMIC_CACHE).then((cache) => {
               cache.put(request, responseToCache).then(() => {
-                console.log('response is cached');
-                return resolve(response);
-              });
-            });
+                console.log('response is cached')
+                return resolve(response)
+              })
+            })
           })
           .catch((error) => {
             caches.match(request).then((cachedResponse) => {
               if (cachedResponse) {
-                return resolve(cachedResponse);
+                return resolve(cachedResponse)
               }
-              return reject(error);
-            });
-          });
-    });
+              return reject(error)
+            })
+          })
+    })
 
 /**
  * For limiting in time root requests which are not redirected (like get `/login`)
  * Usually it's server job, but in our case.. I'm too lazy to set up server with complex config
  */
 const buildLimitingGetResponse = () =>
-    new Promise((resolve, reject) => setTimeout(resolve, 1000, new Response()));
+    new Promise((resolve, reject) => setTimeout(resolve, 1000, new Response()))
 
 /**
  * makes hash from blob
@@ -166,19 +171,19 @@ const buildLimitingGetResponse = () =>
  */
 const makeBlobHash = (blob) =>
     new Promise((resolve, reject) => {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onloadend = (event) => {
-        const { result } = event.target;
-        const hash = String(CryptoJS.SHA256(result));
-        console.log(hash);
-        return resolve(hash);
-      };
+        const { result } = event.target
+        const hash = String(CryptoJS.SHA256(result))
+        console.log(hash)
+        return resolve(hash)
+      }
       reader.onerror = (err) => {
-        console.warn(err);
-        return resolve('');
-      };
-      reader.readAsBinaryString(blob);
-    });
+        console.warn(err)
+        return resolve('')
+      }
+      reader.readAsBinaryString(blob)
+    })
 
 /**
  * makes hash from request
@@ -187,13 +192,13 @@ const makeBlobHash = (blob) =>
  */
 const makeRequestHash = (request) =>
     new Promise((resolve, reject) => {
-      const clonedRequest = request.clone();
-      const { url } = clonedRequest;
+      const clonedRequest = request.clone()
+      const { url } = clonedRequest
       clonedRequest.json().then((body) => {
-        const hash = String(CryptoJS.SHA256(JSON.stringify(body)));
-        return resolve(hash);
-      });
-    });
+        const hash = String(CryptoJS.SHA256(JSON.stringify(body)))
+        return resolve(hash)
+      })
+    })
 
 /**
  * connects to Idb and returns connection
@@ -201,21 +206,21 @@ const makeRequestHash = (request) =>
  */
 const getDb = () =>
     new Promise((resolve, reject) => {
-      const createDb = indexedDB.open('test');
+      const createDb = indexedDB.open('test')
       createDb.onerror = (event) => {
-        console.log('failed to open Idb');
-        return reject(event);
-      };
+        console.log('failed to open Idb')
+        return reject(event)
+      }
       createDb.onsuccess = (event) => {
-        const db = event.target.result;
-        return resolve(db);
-      };
+        const db = event.target.result
+        return resolve(db)
+      }
       createDb.onupgradeneeded = (event) => {
-        const db = event.target.result;
-        db.createObjectStore('posts', { keyPath: 'hash' });
-        return resolve(db);
-      };
-    });
+        const db = event.target.result
+        db.createObjectStore('posts', { keyPath: 'hash' })
+        return resolve(db)
+      }
+    })
 
 /**
  * returns object store from Idb
@@ -225,11 +230,11 @@ const getObjectStore = () =>
     new Promise((resolve, reject) => {
       getDb()
           .then((db) => {
-            const tx = db.transaction(['posts'], 'readwrite');
-            return resolve(tx.objectStore('posts'));
+            const tx = db.transaction(['posts'], 'readwrite')
+            return resolve(tx.objectStore('posts'))
           })
-          .catch(reject);
-    });
+          .catch(reject)
+    })
 
 /**
  * returns post body from Idb if post url matches regexps to save
@@ -239,28 +244,28 @@ const getObjectStore = () =>
  */
 const getPostIfNeed = (request) =>
     new Promise((resolve, reject) => {
-      const clonedRequest = request.clone();
+      const clonedRequest = request.clone()
       if (!isPostToSave(request.url)) {
-        return resolve(null);
+        return resolve(null)
       }
       makeRequestHash(clonedRequest).then((hash) => {
         getObjectStore().then((store) => {
-          const objectRequest = store.get(hash);
+          const objectRequest = store.get(hash)
           objectRequest.onerror = (event) => {
-            console.warn('error while saving');
-            return resolve(null);
-          };
+            console.warn('error while saving')
+            return resolve(null)
+          }
           objectRequest.onsuccess = (event) => {
-            const { result } = objectRequest;
+            const { result } = objectRequest
             if (!result || result.url !== clonedRequest.url) {
-              return resolve(null);
+              return resolve(null)
             }
-            const response = buildResponseFromDbRecord(result);
-            return resolve(response);
-          };
-        });
-      });
-    });
+            const response = buildResponseFromDbRecord(result)
+            return resolve(response)
+          }
+        })
+      })
+    })
 
 /**
  * checks if given url matches regexps to save post
@@ -268,7 +273,7 @@ const getPostIfNeed = (request) =>
  * @return {boolean}
  */
 const isPostToSave = (url) =>
-    !!url && postRegexpsToSave.some((regexp) => regexp.test(url));
+    !!url && postRegexpsToSave.some((regexp) => regexp.test(url))
 
 /**
  * saves post body if post url matches regexps to save
@@ -279,29 +284,29 @@ const isPostToSave = (url) =>
  */
 const savePostIfNeed = (request, response) =>
     new Promise((resolve, reject) => {
-      const { url } = request;
+      const { url } = request
       if (!isPostToSave(url) || !response || !(response instanceof Response)) {
-        return resolve(null);
+        return resolve(null)
       }
 
-      const contentType = response.headers.get('Content-Type') || '';
+      const contentType = response.headers.get('Content-Type') || ''
       makeRequestHash(request).then((hash) => {
         response
             .blob()
             .then((blob) => {
               getObjectStore().then((store) => {
-                const objectRequest = store.put({ url, blob, hash, contentType });
-                console.log('saving');
+                const objectRequest = store.put({ url, blob, hash, contentType })
+                console.log('saving')
                 objectRequest.onerror = (event) => {
-                  console.warn('unable to save');
-                  return resolve(null);
-                };
-                objectRequest.onsuccess = (event) => resolve(response);
-              });
+                  console.warn('unable to save')
+                  return resolve(null)
+                }
+                objectRequest.onsuccess = (event) => resolve(response)
+              })
             })
-            .catch(() => resolve(null));
-      });
-    });
+            .catch(() => resolve(null))
+      })
+    })
 
 /**
  * Service Worker initialization.
@@ -314,12 +319,12 @@ self.addEventListener('install', (event) =>
               console.log(`${db.name} database loaded successfully`)
           ),
           caches.open(STATIC_CACHE).then((cache) => {
-            console.log('Opened cache');
-            return cache.addAll(urlsToPreCache);
+            console.log('Opened cache')
+            return cache.addAll(urlsToPreCache)
           }),
         ])
     )
-);
+)
 
 /**
  * @important !!!
@@ -328,13 +333,13 @@ self.addEventListener('install', (event) =>
  * it also means that client would now generate events (like FetchEvent) in our serviceWorker
  */
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
-});
+  event.waitUntil(self.clients.claim())
+})
 
 /**
  * Fetch event handler
  */
-self.addEventListener('fetch', processRequest);
+self.addEventListener('fetch', processRequest)
 
 /**
  * listens postMessage from client
@@ -344,15 +349,15 @@ self.addEventListener(
     ({ data = {} }) => {
       switch (data.type) {
         case OFFLINE_TYPE:
-          return pushOfflineNotification();
+          return pushOfflineNotification()
         case ONLINE_TYPE:
-          queue = data.payload;
-          return pushOnlineNotification(data);
+          queue = data.payload
+          return pushOnlineNotification(data)
         default:
       }
     },
     false
-);
+)
 
 /**
  * listens notification click action
@@ -360,15 +365,15 @@ self.addEventListener(
 self.addEventListener(
     'notificationclick',
     (event) => {
-      event.notification.close();
+      event.notification.close()
 
       switch (event.action) {
         case 'sync':
-          return fetchQueue();
+          return fetchQueue()
         case 'fck':
-          return pushWarningNotification();
+          return pushWarningNotification()
         default:
       }
     },
     false
-);
+)

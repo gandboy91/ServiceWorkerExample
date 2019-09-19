@@ -57,3 +57,15 @@ export const addCardOffline = ({ card }) => ({
     type: ADD_CARD_OFFLINE,
     payload: card,
 })
+
+export const REMOVE_CARD_ONLINE = 'REMOVE_CARD_ONLINE'
+export const removeCardOnline = ({ id }) => ({
+    type: REMOVE_CARD_ONLINE,
+    payload: { id },
+})
+
+export const REMOVE_CARD_OFFLINE = 'REMOVE_CARD_OFFLINE'
+export const removeCardOffline = ({ id }) => ({
+    type: REMOVE_CARD_OFFLINE,
+    payload: { id },
+})

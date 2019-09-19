@@ -1,12 +1,13 @@
 import {START_FETCHING, STOP_FETCHING} from "../actions";
 import {
     CHANGE_CARD_REQUEST,
-    REMOVE_CARD,
+    REMOVE_CARD_ONLINE,
     FETCH_CARDS_REQUEST,
     FETCH_CARDS_SUCCESS,
     LIKE_CARD_SUCCESS,
     ADD_CARD_ONLINE,
-    ADD_CARD_OFFLINE
+    ADD_CARD_OFFLINE,
+    REMOVE_CARD_OFFLINE
 } from '../actions/cards';
 import {CURRENT_USER_REQUEST} from "../actions/user";
 
@@ -54,12 +55,19 @@ export default function cards(state = initialState, action) {
                     [payload.id]: payload.card
                 }
             }
-        case REMOVE_CARD:
+        case REMOVE_CARD_ONLINE:
             const cards = {...state.cards}
             delete cards[payload.id]
             return {
                 ...state,
                 cards
+            }
+        case REMOVE_CARD_OFFLINE:
+            const offlineCards = {...state.offlineCards}
+            delete cards[payload.id]
+            return {
+                ...state,
+                offlineCards
             }
         case ADD_CARD_ONLINE:
             return {

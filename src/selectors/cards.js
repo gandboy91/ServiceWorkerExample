@@ -4,7 +4,7 @@ const getCards = ({ cards }) => cards.cards
 
 const getOfflineCards = ({ cards }) => cards.offlineCards
 
-export const getCard = ({ cards }, { cardId }) => cards.cards[cardId]
+export const getCard = ({ cards }, { cardId }) => cards.cards[cardId] || null
 
 export const getOfflineCard = ({ cards }, { cardId }) => cards.offlineCards[cardId] || null
 

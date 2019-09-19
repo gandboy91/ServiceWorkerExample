@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import {connect} from 'react-redux'
 import PreviewCard from '../components/PreviewCard'
-import {likeCardRequest} from "../actions/cards"
+import { likeCardRequest, removeCardRequest } from '../actions/cards'
 import {getCard} from "../selectors/cards";
 import {getUserRole} from "../selectors/user";
 
 const mapDispatchToProps = {
-    likeRequest: likeCardRequest
+    likeRequest: likeCardRequest,
+    removeRequest: removeCardRequest,
 }
 
 const mapStateToProps = (state, props) => ({

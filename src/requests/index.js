@@ -59,8 +59,21 @@ const postRequest = ({ url, body = null, token = '' }) => fetch (
     .then(processResponse)
     .catch(processErrors)
 
+export const deleteRequest = ({ url, token = '' }) => fetch (
+    `${REST_API_BASE_URL}/${url}`,
+        {
+                ...getDefaultRequestOptions(token),
+                method: "DELETE",
+            }
+    )
+    .then(processRawResponse)
+    .then(processResponse)
+    .catch(processErrors)
 
 export const get = getRequest
 export const post = postRequest
+
 export const getWithToken = withToken(getRequest)
 export const postWithToken = withToken(postRequest)
+export const deleteWithToken = withToken(deleteRequest)
+

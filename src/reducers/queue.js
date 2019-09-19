@@ -1,4 +1,4 @@
-import { ENQUEUE_EDIT, ENQUEUE_ADD } from '../actions/queue';
+import { ENQUEUE_EDIT, ADD_TO_QUEUE, REMOVE_FROM_QUEUE } from '../actions/queue';
 
 const initialState = {}
 
@@ -10,11 +10,15 @@ export default function queue(state = initialState, action) {
         ...state,
         [action.key]: action.payload
       }
-    case ENQUEUE_ADD:
+    case ADD_TO_QUEUE:
       return {
         ...state,
         [action.key]: action.payload
       }
+    case REMOVE_FROM_QUEUE:
+      const queue = { ...state }
+      delete queue[action.key]
+      return queue
     default:
       return state
   }
