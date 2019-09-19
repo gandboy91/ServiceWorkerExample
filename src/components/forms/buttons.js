@@ -3,7 +3,7 @@ import {faSignInAlt, faSignOutAlt, faHome} from "@fortawesome/free-solid-svg-ico
 import { Link } from 'react-router-dom'
 import React from "react"
 
-export const HomeButton = () => <Link className='faIcon' to="/">
+export const HomeButton = () => <Link className='btn btn-link text-white mx-3' to="/">
     <FontAwesomeIcon icon={faHome} size="2x" />
 </Link>
 
