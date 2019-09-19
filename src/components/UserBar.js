@@ -22,7 +22,7 @@ const UserBar = React.memo(({ user: { name, id }, connectionStatus, logoutReques
                 ) : (
                     <LoginRedirectButton loginUrl="/login" {...buttonProps} />
                 )}
-                <span className="text-light">{id ? `you logged in as ${name}` : `you haven't logged in`}</span>
+                <span className="text-light">{id ? `${name}` : `log in please`}</span>
             </div>
             <div className="navbar-brand">
                 <ConnectionStatusButton isOnline={connectionStatus === STATUS_ONLINE} />

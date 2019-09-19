@@ -34,9 +34,9 @@ const PreviewCard = React.memo(
       return (
           <div className="card previewCard shadow">
             <div className="card-header">
-                  <h5 className="w-100">
+              <FontAwesomeIcon size="2x" icon={faTimes} className="faIcon float-right" onClick={handleRemove} />
+                  <h5>
                     {title}
-                    <FontAwesomeIcon size="2x" icon={faTimes} className="faIcon float-right" onClick={handleRemove} />
                   </h5>
             </div>
             <div className="card-body">
