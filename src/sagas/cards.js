@@ -50,7 +50,7 @@ function* saveCardOnline(card) {
 
 function* saveCardOffline(card) {
     const id = uniqueId('offline_add_');
-    yield put(addCardOffline({ card: { ...card, id } }));
+    yield put(addCardOffline({ card: getPreparedCard({ ...card, id }) }));
     yield put(
         enqueueAddCard({
             key: id,

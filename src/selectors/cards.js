@@ -17,5 +17,5 @@ export const getCardsIds = createSelector(
 
 export const getOfflineCardsIds = createSelector(
     [ getOfflineCards ],
-    offlineCards => Object.keys(offlineCards)
+    offlineCards => Object.keys(offlineCards) || []
 )

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PropTypes from "prop-types";
 
-const PreviewOfflineCard = React.memo(({ card: { title, text, } }) => {
+const PreviewOfflineCard = React.memo(({ card: { title, text } }) => {
   return <div className='card previewCard offline shadow'>
     <div className='card-header'>
       <h5>{title}</h5>
@@ -17,9 +17,8 @@ const PreviewOfflineCard = React.memo(({ card: { title, text, } }) => {
   </div>
 })
 
-PreviewCard.propTypes = {
+PreviewOfflineCard.propTypes = {
   card: PropTypes.object.isRequired,
-  likeRequest: PropTypes.func.isRequired
 }
 
 export default PreviewOfflineCard

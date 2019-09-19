@@ -17,7 +17,7 @@ const AddButton = (props) => <Link className='addButton previewCard shadow' to={
 const CardList = React.memo(({ cardsIds = [], offlineCardsIds = [] }) => <div className='cardList'>
     {
         cardsIds.map(
-            <PreviewCardContainer key={id} cardId={id} />
+            id => <PreviewCardContainer key={id} cardId={id} />
         )
     }
     {
