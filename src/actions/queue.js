@@ -1,7 +1,5 @@
-import { uniqueId } from 'lodash/utils'
-
 export const ENQUEUE_EDIT = 'ENQUEUE_EDIT'
-export const enqueueEditRequest = ({ url, method, body }) => ({
+export const enqueueEditCard = ({ url, method, body }) => ({
   type: ENQUEUE_EDIT,
   key: url,
   payload: {
@@ -12,9 +10,9 @@ export const enqueueEditRequest = ({ url, method, body }) => ({
 })
 
 export const ENQUEUE_ADD = 'ENQUEUE_ADD'
-export const enqueueAddRequest = ({ url, method, body }) => ({
+export const enqueueAddCard = ({ key, url, method, body }) => ({
   type: ENQUEUE_ADD,
-  key: uniqueId('add_'),
+  key: key,
   payload: {
     url,
     method,

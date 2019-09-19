@@ -1,5 +1,13 @@
 import {START_FETCHING, STOP_FETCHING} from "../actions";
-import {CHANGE_CARD_REQUEST, REMOVE_CARD, FETCH_CARDS_REQUEST, FETCH_CARDS_SUCCESS, LIKE_CARD_SUCCESS} from "../actions/cards";
+import {
+    CHANGE_CARD_REQUEST,
+    REMOVE_CARD,
+    FETCH_CARDS_REQUEST,
+    FETCH_CARDS_SUCCESS,
+    LIKE_CARD_SUCCESS,
+    ADD_CARD_ONLINE,
+    ADD_CARD_OFFLINE
+} from '../actions/cards';
 import {CURRENT_USER_REQUEST} from "../actions/user";
 
 const initialState = {
@@ -52,6 +60,22 @@ export default function cards(state = initialState, action) {
             return {
                 ...state,
                 cards
+            }
+        case ADD_CARD_ONLINE:
+            return {
+                ...state,
+                cards: {
+                    ...state.cards,
+                    [action.payload.id]: action.payload,
+                }
+            }
+        case ADD_CARD_OFFLINE:
+            return {
+                ...state,
+                offlineCards: {
+                    ...state.offlineCards,
+                    [action.payload.id]: action.payload,
+                }
             }
         default:
             return state

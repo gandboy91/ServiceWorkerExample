@@ -45,3 +45,15 @@ export const removeCardRequest = id => ({
     type: REMOVE_CARD_REQUEST,
     payload: id
 })
+
+export const ADD_CARD_ONLINE = 'ADD_CARD_ONLINE'
+export const addCardOnline = ({ card }) => ({
+    type: ADD_CARD_ONLINE,
+    payload: card,
+})
+
+export const ADD_CARD_OFFLINE = 'ADD_CARD_OFFLINE'
+export const addCardOffline = ({ card }) => ({
+    type: ADD_CARD_OFFLINE,
+    payload: card,
+})
