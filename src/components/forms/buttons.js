@@ -1,7 +1,11 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faSignInAlt, faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
+import {faSignInAlt, faSignOutAlt, faHome} from "@fortawesome/free-solid-svg-icons"
 import { Link } from 'react-router-dom'
 import React from "react"
+
+export const HomeButton = () => <Link className='faIcon' to="/">
+    <FontAwesomeIcon icon={faHome} size="2x" />
+</Link>
 
 export const LogoutButton = ({ handleLogout, ...props }) => <button className='btn btn-link' onClick={handleLogout}>
     <FontAwesomeIcon icon={faSignOutAlt} {...props} />

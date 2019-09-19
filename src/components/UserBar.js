@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import {
-    ConnectionStatusButton,
-    LoginRedirectButton,
-    LogoutButton,
+  ConnectionStatusButton, HomeButton,
+  LoginRedirectButton,
+  LogoutButton,
 } from './forms/buttons';
 import { STATUS_ONLINE } from '../constants/connection';
 
@@ -16,6 +16,7 @@ const UserBar = React.memo(({ user: { name, id }, connectionStatus, logoutReques
     return (
         <nav className="navbar navbar-dark bg-dark fixed-top px-4">
             <div className="navbar-item">
+                {id && <HomeButton />}
                 {id ? (
                     <LogoutButton handleLogout={handleLogout} {...buttonProps} />
                 ) : (
