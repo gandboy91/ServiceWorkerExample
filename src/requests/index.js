@@ -46,6 +46,17 @@ const getRequest = ({ url, params = null, token = '' }) => {
     .then(processResponse)
     .catch(processErrors)
 }
+export const postSelfRequest = ({ url, body = null }) => fetch (
+        `/${url}`,
+    {
+          ...getDefaultRequestOptions(),
+          method: "POST",
+          body: body ? JSON.stringify(body) : '{}'
+        }
+    )
+    .then(processRawResponse)
+    .then(processResponse)
+    .catch(processErrors)
 
 const postRequest = ({ url, body = null, token = '' }) => fetch (
     `${REST_API_BASE_URL}/${url}`,

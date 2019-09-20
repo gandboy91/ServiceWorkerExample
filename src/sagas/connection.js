@@ -8,6 +8,8 @@ import { getFromStorage } from '../helpers/storage'
 import { TOKEN_STORAGE_KEY } from '../constants/storage'
 import { getIsIos } from '../selectors/user'
 import { openModal } from '../actions/modal'
+import { pushQueue } from '../requests/queue';
+import { fetchCardsRequest } from '../actions/cards';
 
 function connectionEventsChannel() {
   return eventChannel((emit) => {
@@ -38,9 +40,13 @@ function* commonCallWorker(status) {
 function* iosCallWorker(status) {
   const queue = yield select(selectQueue)
   const queueLength = Object.keys(queue).length
-  const token = getFromStorage(TOKEN_STORAGE_KEY)
   const text = `you have ${queueLength || 'no'} changes made in offline. ${queueLength ? 'Synchronize ?' : 'Continue ?' }`
-  const onAccept = () => console.log('accept')
+  const onAccept = queueLength
+      ? () => {
+        pushQueue(queue)
+        //window.location = '/'
+      }
+      : () => {}
   const onDecline = () => console.log('decline')
 
   if (status === STATUS_ONLINE) {
