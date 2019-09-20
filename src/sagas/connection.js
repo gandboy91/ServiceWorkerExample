@@ -4,8 +4,10 @@ import { setConnectionStatus } from '../actions/connection'
 import { STATUS_OFFLINE, STATUS_ONLINE } from '../constants/connection'
 import { callWorker } from '../helpers/postMessage'
 import { selectQueue } from '../selectors/queue'
-import { getFromStorage } from '../helpers/storage';
-import { TOKEN_STORAGE_KEY } from '../constants/storage';
+import { getFromStorage } from '../helpers/storage'
+import { TOKEN_STORAGE_KEY } from '../constants/storage'
+import { getIsIos } from '../selectors/user'
+import { openModal } from '../actions/modal'
 
 function connectionEventsChannel() {
   return eventChannel((emit) => {
@@ -24,17 +26,43 @@ function connectionEventsChannel() {
   })
 }
 
+function* commonCallWorker(status) {
+  const queue = yield select(selectQueue)
+  const token = getFromStorage(TOKEN_STORAGE_KEY)
+  yield call(callWorker, {
+    type: status,
+    payload: status === STATUS_ONLINE ? { queue, token } : {},
+  })
+}
+
+function* iosCallWorker(status) {
+  const queue = yield select(selectQueue)
+  const queueLength = Object.keys(queue).length
+  const token = getFromStorage(TOKEN_STORAGE_KEY)
+  const text = `you have ${queueLength || 'no'} changes made in offline. ${queueLength ? 'Synchronize ?' : 'Continue ?' }`
+  const onAccept = () => console.log('accept')
+  const onDecline = () => console.log('decline')
+
+  if (status === STATUS_ONLINE) {
+    yield put(
+        openModal({
+          text,
+          acceptTitle: 'yes, please',
+          declineTitle: 'f*ck',
+          onAccept,
+          onDecline,
+        })
+    )
+  }
+}
+
 function* connectionWatcher() {
   const channel = yield call(connectionEventsChannel)
   try {
     while (true) {
       const { status } = yield take(channel)
-      const queue = yield select(selectQueue)
-      const token = getFromStorage(TOKEN_STORAGE_KEY)
-      yield call(callWorker, {
-        type: status,
-        payload: status === STATUS_ONLINE ? { queue, token } : {},
-      })
+      const isIos = yield select(getIsIos)
+      yield call(!isIos ? iosCallWorker : commonCallWorker, status)
       yield put(setConnectionStatus(status))
     }
   } catch (error) {

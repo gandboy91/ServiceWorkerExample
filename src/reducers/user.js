@@ -23,6 +23,7 @@ const initialState = {
     token: getFromStorage(TOKEN_STORAGE_KEY),
     errors: [],
     isProcessing: false,
+    isIos: navigator.userAgent && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
 }
 
 export default function user(state = initialState, action) {

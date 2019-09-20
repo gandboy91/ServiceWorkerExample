@@ -9,9 +9,11 @@ import RegisterPage from './pages/Register'
 import UserPage from './pages/User'
 import MainPage from './pages/Main'
 import UserBarContainer from './containers/UserBarContainer'
+import ModalContainer from './containers/ModalContainer'
 import user from './reducers/user'
 import cards from './reducers/cards'
 import queue from './reducers/queue'
+import modal from './reducers/modal'
 import connection from './reducers/connection'
 import { createStore, applyMiddleware } from 'redux'
 import PrivateRoute from './components/common/PrivateRoute'
@@ -25,6 +27,7 @@ const reducer = combineReducers({
     user,
     queue,
     connection,
+    modal,
     cards
 })
 
@@ -64,6 +67,7 @@ const App = React.memo(props => {
                             <Route path="/login" component={LoginPage} />
                             <Route component={WrongRoute} />
                         </Switch>
+                        <ModalContainer />
                     </div>
                 </Router>
             </div>

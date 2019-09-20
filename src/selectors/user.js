@@ -8,3 +8,5 @@ export const getUserRole = createSelector(
     [ getUser ],
     ({ role }) => role
 )
+
+export const getIsIos = ({ user }) => user.isIos
