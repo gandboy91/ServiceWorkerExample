@@ -16,8 +16,6 @@ const urlsToPreCache = [
   '/crypto.js',
   '/noveo.ico',
   '/noveo.png',
-  '/happyCat.png',
-  '/sadCat.png',
 ];
 
 /**
