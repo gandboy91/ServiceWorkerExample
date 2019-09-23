@@ -25,3 +25,8 @@ export const removeFromQueue = ({ key }) => ({
   type: REMOVE_FROM_QUEUE,
   key: key,
 })
+
+export const PUSH_QUEUE = 'PUSH_QUEUE'
+export const pushQueue = () => ({
+  type: PUSH_QUEUE,
+})

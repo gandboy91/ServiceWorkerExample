@@ -28,6 +28,9 @@ const NO_CACHE_METHODS = ['DELETE', 'PUT'];
 
 const OFFLINE_TYPE = 'offline';
 const ONLINE_TYPE = 'online';
+const IOS_ONLINE_TYPE = 'iosOnline';
+
+const PUSH_QUEUE_REGEXP = /pushQueue$/;
 
 const ROUTE_REGEXP = /^([\w]+\/?)+$/;
 
@@ -37,6 +40,20 @@ const postRegexpsToSave = [LOGIN_REGEXP];
 
 const STATIC_CACHE = 'staticCache';
 const DYNAMIC_CACHE = 'dynamicCache';
+
+const getPreflightMockResponse = () =>
+    new Response(new Blob(), {
+      status: 200,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+    });
+
+const getSuccessMockResponse = () => {
+  const blob = new Blob([JSON.stringify({ success: true })], {
+    type: 'application/json',
+  });
+  const init = { status: 200, };
+  return new Response(blob, init);
+};
 
 const buildHeadersForQueue = (token) => ({
   Accept: 'application/json',
@@ -51,37 +68,28 @@ const isRoute = (request) => {
   return request.method === 'GET' && ROUTE_REGEXP.test(relativeUrl);
 };
 
-const queueOnSuccess = () => self.clients.matchAll({ type: 'window' })
-    .then(
-        clisents => clisents.map(
-            client => {
-              if ('navigate' in client) {
-                return client.navigate('/');
-              }
-            }
-        )
-    )
+const refreshClients = () =>
+    self.clients.matchAll({ type: 'window' }).then((clients) =>
+        clients.map((client) => {
+          if ('navigate' in client) {
+            return client.navigate('/');
+          }
+        })
+    );
 
 /**
  * fetches all requests from queue
  */
-const fetchQueue = () => {
-  Object.values(queue).forEach(({ url, method, body }) =>
-      fetch(url, {
-        method,
-        headers: buildHeadersForQueue(token),
-        body: body ? JSON.stringify(body) : '{}',
-      }).then((response) =>
-          response
-              .json()
-              .then(({ success }) =>
-                  success
-                      ? queueOnSuccess()
-                      : console.warn(`${method} ${url} error :(`)
-              )
-      )
-  );
-};
+const fetchQueue = () =>
+    Promise.all(
+        Object.values(queue).map(({ url, method, body }) =>
+            fetch(url, {
+              method,
+              headers: buildHeadersForQueue(token),
+              body: body ? JSON.stringify(body) : '{}',
+            })
+        )
+    );
 
 /**
  * Fetch event handler. Works as a proxy for requests.
@@ -91,6 +99,9 @@ const fetchQueue = () => {
 const processRequest = (event) => {
   const { request } = event;
 
+  if (PUSH_QUEUE_REGEXP.test(request.url)) {
+    return event.respondWith(buildQueueResponse(request));
+  }
   if (request.method === 'POST') {
     return event.respondWith(buildPostResponse(request));
   }
@@ -120,7 +131,7 @@ const pushOnlineNotification = (queue) => {
     requireInteraction: true,
     actions: [
       { action: 'sync', title: 'synchronize please!' },
-      { action: 'fck', title: 'f.ck' },
+      { action: 'fck', title: 'f*ck' },
     ],
   });
 };
@@ -131,7 +142,7 @@ const pushOfflineNotification = () =>
       icon: sadCatImg,
       requireInteraction: true,
       actions: [
-        { action: 'fck', title: 'f.ck' },
+        { action: 'fck', title: 'f*ck' },
         { action: 'ok', title: 'no problem' },
       ],
     });
@@ -142,6 +153,24 @@ const buildResponseFromDbRecord = ({ blob, contentType }) =>
     new Response(blob, {
       headers: buildHeaders(contentType),
     });
+
+const buildQueueResponse = (request) => {
+  if (request.method === 'OPTIONS') {
+    return new Promise((resolve, reject) =>
+        resolve(getPreflightMockResponse())
+    );
+  }
+  return new Promise((resolve, reject) => {
+    const clonedRequest = request.clone();
+    clonedRequest.json().then((body) => {
+      queue = body.queue;
+      token = body.token;
+      return fetchQueue()
+          .then(() => resolve(getSuccessMockResponse()))
+          .catch(() => reject(new Error('error while processing queue')));
+    });
+  });
+};
 
 /**
  * Builds response for POST requests with Indexed db.
@@ -155,9 +184,7 @@ const buildPostResponse = (request) =>
       fetch(request)
           .then((response) => {
             const clonedResponse = response.clone();
-            savePostIfNeed(clonedRequest, clonedResponse).then(() =>
-                resolve(response)
-            );
+            return savePostIfNeed(clonedRequest, clonedResponse).then(() => resolve(response));
           })
           .catch((error) => {
             getPostIfNeed(clonedRequest).then((postCachedResponse) => {
@@ -376,7 +403,9 @@ self.addEventListener('install', (event) =>
  * it also means that client would now generate events (like FetchEvent) in our serviceWorker
  */
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  if (self.clients && self.clients.claim) {
+    event.waitUntil(self.clients.claim());
+  }
 });
 
 /**
@@ -397,7 +426,12 @@ self.addEventListener(
           queue = data.payload.queue || {};
           token = data.payload.token || '';
           return pushOnlineNotification(queue);
+        case IOS_ONLINE_TYPE:
+          queue = data.payload.queue || {};
+          token = data.payload.token || '';
+          return fetchQueue();
         default:
+          return
       }
     },
     false
@@ -413,7 +447,8 @@ self.addEventListener(
 
       switch (event.action) {
         case 'sync':
-          return fetchQueue();
+          return fetchQueue()
+              .then(refreshClients());
         case 'fck':
           return pushWarningNotification();
         default:
