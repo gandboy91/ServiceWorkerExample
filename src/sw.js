@@ -20,15 +20,19 @@ const urlsToPreCache = [
   '/sadCat.png',
 ];
 
+/**
+ * requests queue. Here we store all requests made offline
+ * @type []
+ */
 let queue = [];
 let token = '';
+
 const apiKey = 'BnyJAR5gosdRqQkZQ3HMXoWdJWsljC6xPmu1qa56';
 
 const NO_CACHE_METHODS = ['DELETE', 'PUT'];
 
 const OFFLINE_TYPE = 'offline';
 const ONLINE_TYPE = 'online';
-const IOS_ONLINE_TYPE = 'iosOnline';
 
 const PUSH_QUEUE_REGEXP = /pushQueue$/;
 
@@ -41,12 +45,21 @@ const postRegexpsToSave = [LOGIN_REGEXP];
 const STATIC_CACHE = 'staticCache';
 const DYNAMIC_CACHE = 'dynamicCache';
 
-const getPreflightMockResponse = () =>
+/**
+ * returns response for OPTIONS request for correct CORS-mode requests work
+ * @return {Response}
+ */
+const getPreflightResponse = () =>
     new Response(new Blob(), {
       status: 200,
       headers: { 'Access-Control-Allow-Origin': '*' },
     });
 
+/**
+ * returns success response with { success: true } body (noveo rest api format)
+ * @note Response constructor doesn't take json or object, so we use Blob
+ * @return {Response}
+ */
 const getSuccessMockResponse = () => {
   const blob = new Blob([JSON.stringify({ success: true })], {
     type: 'application/json',
@@ -55,34 +68,39 @@ const getSuccessMockResponse = () => {
   return new Response(blob, init);
 };
 
+/**
+ * returns correct headers to work with noveo rest api
+ * @param token
+ * @return {{Authorization: string, Accept: string, 'X-Application-Key': string, 'Content-Type': string}}
+ */
 const buildHeadersForQueue = (token) => ({
-  Accept: 'application/json',
+  'Accept': 'application/json',
   'Content-Type': 'application/json',
   'X-Application-Key': apiKey,
-  Authorization: `Bearer ${token}`,
+  'Authorization': `Bearer ${token}`,
 });
 
-const isRoute = (request) => {
-  const { url } = request;
-  const relativeUrl = url.replace(self.registration.scope, '');
-  return request.method === 'GET' && ROUTE_REGEXP.test(relativeUrl);
-};
-
-const refreshClients = () =>
-    self.clients.matchAll({ type: 'window' }).then((clients) =>
-        clients.map((client) => {
-          if ('navigate' in client) {
-            return client.navigate('/');
-          }
-        })
-    );
+/**
+ * makes all subscribed clients refresh (by going to root page)
+ * @return void
+ */
+const refreshClients = () => {
+  self.clients.matchAll({ type: 'window' }).then((clients) =>
+      clients.map((client) => {
+        if ('navigate' in client) {
+          return client.navigate('/');
+        }
+      })
+  );
+}
 
 /**
  * fetches all requests from queue
+ * @see queue
  */
 const fetchQueue = () =>
     Promise.all(
-        Object.values(queue).map(({ url, method, body }) =>
+        queue.map(({ url, method, body }) =>
             fetch(url, {
               method,
               headers: buildHeadersForQueue(token),
@@ -157,7 +175,7 @@ const buildResponseFromDbRecord = ({ blob, contentType }) =>
 const buildQueueResponse = (request) => {
   if (request.method === 'OPTIONS') {
     return new Promise((resolve, reject) =>
-        resolve(getPreflightMockResponse())
+        resolve(getPreflightResponse())
     );
   }
   return new Promise((resolve, reject) => {
@@ -428,12 +446,8 @@ self.addEventListener(
           queue = data.payload.queue || {};
           token = data.payload.token || '';
           return pushOnlineNotification(queue);
-        case IOS_ONLINE_TYPE:
-          queue = data.payload.queue || {};
-          token = data.payload.token || '';
-          return fetchQueue();
-
         default:
+          return
       }
     },
     false

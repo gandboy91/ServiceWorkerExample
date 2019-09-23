@@ -37,7 +37,7 @@ function* commonCallWorker(status) {
 
 function* iosCallWorker(status) {
   const queue = yield select(selectQueue)
-  const queueLength = Object.keys(queue).length
+  const queueLength = queue.length
   const text = `you have ${queueLength || 'no'} changes made in offline. ${queueLength ? 'Synchronize ?' : 'Continue ?' }`
 
   if (status === STATUS_ONLINE) {

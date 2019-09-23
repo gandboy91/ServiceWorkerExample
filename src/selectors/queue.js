@@ -1,1 +1,1 @@
-export const selectQueue = ({ queue }) => queue
+export const selectQueue = ({ queue }) => Object.values(queue)
