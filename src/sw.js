@@ -51,7 +51,7 @@ const getSuccessMockResponse = () => {
   const blob = new Blob([JSON.stringify({ success: true })], {
     type: 'application/json',
   });
-  const init = { status: 200, };
+  const init = { status: 200 };
   return new Response(blob, init);
 };
 
@@ -184,7 +184,9 @@ const buildPostResponse = (request) =>
       fetch(request)
           .then((response) => {
             const clonedResponse = response.clone();
-            return savePostIfNeed(clonedRequest, clonedResponse).then(() => resolve(response));
+            return savePostIfNeed(clonedRequest, clonedResponse).then(() =>
+                resolve(response)
+            );
           })
           .catch((error) => {
             getPostIfNeed(clonedRequest).then((postCachedResponse) => {
@@ -430,8 +432,8 @@ self.addEventListener(
           queue = data.payload.queue || {};
           token = data.payload.token || '';
           return fetchQueue();
+
         default:
-          return
       }
     },
     false
@@ -447,8 +449,7 @@ self.addEventListener(
 
       switch (event.action) {
         case 'sync':
-          return fetchQueue()
-              .then(refreshClients());
+          return fetchQueue().then(refreshClients());
         case 'fck':
           return pushWarningNotification();
         default:
