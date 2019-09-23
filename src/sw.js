@@ -30,19 +30,39 @@ let queue = [];
  */
 let token = '';
 
+/**
+ * noveo rest api key
+ * @type {string}
+ */
 const apiKey = 'BnyJAR5gosdRqQkZQ3HMXoWdJWsljC6xPmu1qa56';
 
+/**
+ * methods which aren't supposed to be cached
+ * @type {string[]}
+ */
 const NO_CACHE_METHODS = ['DELETE', 'PUT'];
 
 const OFFLINE_TYPE = 'offline';
 const ONLINE_TYPE = 'online';
 
+/**
+ * regexp to find out if it's "pushing queue" request
+ * @type {RegExp}
+ */
 const PUSH_QUEUE_REGEXP = /pushQueue$/;
 
 const ROUTE_REGEXP = /^([\w]+\/?)+$/;
 
+/**
+ * regexp to find out if it's "login" request
+ * @type {RegExp}
+ */
 const LOGIN_REGEXP = /api\/v1\/login\/?$/;
 
+/**
+ * regexps for routes which are supposed to be saved
+ * @type {RegExp[]}
+ */
 const postRegexpsToSave = [LOGIN_REGEXP];
 
 const STATIC_CACHE = 'staticCache';
