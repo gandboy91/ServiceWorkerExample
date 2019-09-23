@@ -30,3 +30,8 @@ export const PUSH_QUEUE = 'PUSH_QUEUE'
 export const pushQueue = () => ({
   type: PUSH_QUEUE,
 })
+
+export const PUSH_QUEUE_SUCCESS = 'PUSH_QUEUE_SUCCESS'
+export const pushQueueSuccess = () => ({
+  type: PUSH_QUEUE_SUCCESS,
+})

@@ -10,6 +10,7 @@ import {
     REMOVE_CARD_OFFLINE
 } from '../actions/cards';
 import {CURRENT_USER_REQUEST} from "../actions/user";
+import { PUSH_QUEUE_SUCCESS } from '../actions/queue';
 
 const initialState = {
     cards: {},
@@ -84,6 +85,11 @@ export default function cards(state = initialState, action) {
                     ...state.offlineCards,
                     [action.payload.id]: action.payload,
                 }
+            }
+        case PUSH_QUEUE_SUCCESS:
+            return {
+                ...state,
+                offlineCards: {}
             }
         default:
             return state
