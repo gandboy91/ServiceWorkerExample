@@ -25,6 +25,11 @@ const urlsToPreCache = [
  * @type []
  */
 let queue = [];
+
+/**
+ * clients token. It's necessary for working with noveo rest api
+ * @type {string}
+ */
 let token = '';
 
 const apiKey = 'BnyJAR5gosdRqQkZQ3HMXoWdJWsljC6xPmu1qa56';
@@ -110,25 +115,8 @@ const fetchQueue = () =>
     );
 
 /**
- * Fetch event handler. Works as a proxy for requests.
- * Saves response for request if need. Build with online-first strategy
- * all GET requests are processing in race with limiting request (1 sec)
+ * push notification when client is rude
  */
-const processRequest = (event) => {
-  const { request } = event;
-
-  if (PUSH_QUEUE_REGEXP.test(request.url)) {
-    return event.respondWith(buildQueueResponse(request));
-  }
-  if (request.method === 'POST') {
-    return event.respondWith(buildPostResponse(request));
-  }
-
-  return event.respondWith(
-      Promise.race([buildResponse(request), buildLimitingGetResponse()])
-  );
-};
-
 const pushWarningNotification = () =>
     self.registration.showNotification('say it to me asshole!', {
       body: `What did you say?? I'll find you by IP!`,
@@ -137,12 +125,13 @@ const pushWarningNotification = () =>
       actions: [{ action: 'assh', title: 'yes, I am asshole' }],
     });
 
-const pushOnlineNotification = (queue) => {
-  const queueLength = Object.keys(queue).length;
-  self.registration.showNotification('Online again!', {
+/**
+ * push notification when client goes online
+ */
+const pushOnlineNotification = () => self.registration.showNotification('Online again!', {
     body: `You're online! ${
-        queueLength
-            ? `You've made ${queueLength} changes in offline. Do you wanna synchronize?`
+        queue.length
+            ? `You've made ${queue.length} changes in offline. Do you wanna synchronize?`
             : ''
         }`,
     icon: happyCatImg,
@@ -152,8 +141,10 @@ const pushOnlineNotification = (queue) => {
       { action: 'fck', title: 'f*ck' },
     ],
   });
-};
 
+/**
+ * push notification when client goes offline
+ */
 const pushOfflineNotification = () =>
     self.registration.showNotification('You are offline now :(', {
       body: `You're offline.. We will try to make it not so painful for u..`,
@@ -165,13 +156,31 @@ const pushOfflineNotification = () =>
       ],
     });
 
-const buildHeaders = (contentType) => ({ 'Content-Type': contentType });
+/**
+ * returns headers object by given content type
+ * @param contentType
+ * @returns {Object}
+ */
+const buildHeadersByContentType = (contentType) => ({ 'Content-Type': contentType });
 
+/**
+ * returns Response build from db record
+ * @param blob
+ * @param contentType
+ * @return {Response}
+ */
 const buildResponseFromDbRecord = ({ blob, contentType }) =>
     new Response(blob, {
-      headers: buildHeaders(contentType),
+      headers: buildHeadersByContentType(contentType),
     });
 
+/**
+ * Manages push queue request and returns response
+ * for OPTIONS request returns special response
+ * @see getPreflightResponse
+ * @param request
+ * @return {Promise}
+ */
 const buildQueueResponse = (request) => {
   if (request.method === 'OPTIONS') {
     return new Promise((resolve, reject) =>
@@ -429,11 +438,6 @@ self.addEventListener('activate', (event) => {
 });
 
 /**
- * Fetch event handler
- */
-self.addEventListener('fetch', processRequest);
-
-/**
  * listens postMessage from client
  */
 self.addEventListener(
@@ -471,3 +475,28 @@ self.addEventListener(
     },
     false
 );
+
+/**
+ * Fetch event handler. Works as a proxy for requests.
+ * Saves response for request if need. Build with online-first strategy
+ * all GET requests are processing in race with limiting request (1 sec)
+ */
+const processRequest = (event) => {
+  const { request } = event;
+
+  if (PUSH_QUEUE_REGEXP.test(request.url)) {
+    return event.respondWith(buildQueueResponse(request));
+  }
+  if (request.method === 'POST') {
+    return event.respondWith(buildPostResponse(request));
+  }
+
+  return event.respondWith(
+      Promise.race([buildResponse(request), buildLimitingGetResponse()])
+  );
+};
+
+/**
+ * Fetch event handler
+ */
+self.addEventListener('fetch', processRequest);
