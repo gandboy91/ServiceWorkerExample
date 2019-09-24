@@ -1,7 +1,8 @@
-## PWA training example
+## PWA training example   
 
 App demonstrates main PWA features. *(app-shell, Service Worker, Web Push Notifications)*  
 App is build with webpack, without hash-naming to simplify caching with Service Worker
+
 ---
 
 \* <sup>*to use in production mode you need to place sw.js in your server root folder (`build` or `static` or whatever )*  
