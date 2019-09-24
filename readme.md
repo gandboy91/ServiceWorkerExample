@@ -1,4 +1,4 @@
-##PWA training example
+## PWA training example
 
 App demonstrates main PWA features. *(app-shell, Service Worker, Web Push Notifications)*  
 App is build with webpack, without hash-naming to simplify caching with Service Worker
