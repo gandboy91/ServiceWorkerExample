@@ -27,23 +27,23 @@ https://developers.google.com/web/progressive-web-apps/
 https://developers.google.com/web/fundamentals/web-app-manifest/    
 * good article about SW Caching:
 https://developers.google.com/web/fundamentals/primers/service-workers/  
-* Good video about SW Caching: 
+* good video about SW Caching: 
 https://www.youtube.com/watch?v=ksXwaWHCW6k
 * MDN docs about ServiceWorker 
 https://developer.mozilla.org/ru/docs/Web/API/Service_Worker_API
-* Mozilla SW cockbook (best examples I've found) 
+* mozilla SW cockbook (best examples I've found) 
 https://serviceworke.rs/
-* Great (but quite complex) example of making requests queue with SW  
+* great (but quite complex) example of making requests queue with SW  
  https://serviceworke.rs/request-deferrer_index_doc.html 
 
 ------
 * Indexed DB MDN doc https://developer.mozilla.org/ru/docs/IndexedDB  
-* Article about Indexed DB for the lazy https://proglib.io/p/indexeddb-guide/
-* Great Indexed DB example   
+* article about Indexed DB for the lazy https://proglib.io/p/indexeddb-guide/
+* great Indexed DB example   
 https://developer.mozilla.org/ru/docs/IndexedDB/Using_IndexedDB#Full_IndexedDB_example
 * local Forage docs (handy library built on Indexed DB, Web Sql and localStorage)  
 https://github.com/localForage/localForage
 ----
-* Useful service to test, play and become acquainted with Web Push Notifications   
+* useful service to test, play and become acquainted with Web Push Notifications   
 https://tests.peter.sh/notification-generator/
 
