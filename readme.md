@@ -7,7 +7,7 @@ App is build with webpack, without hash-naming to simplify caching with Service 
 \* <sup>*to use in production mode you need to place sw.js in your server root folder (`build` or `static` or whatever )*  
 \* \* *App is configured to work through `https://`*</sup>
 
-####Technologies and features  used:
+#### Technologies and features  used:
 
 - Fetch API
 - SW Cache Interface
@@ -18,7 +18,7 @@ App is build with webpack, without hash-naming to simplify caching with Service 
 - Redux saga FetchEvent
 - Crypto.js (to make hashes from POST requests)
 
-####What to read about PWA:
+#### What to read about PWA:
 
 * about PWA in general:
 https://developers.google.com/web/progressive-web-apps/  
