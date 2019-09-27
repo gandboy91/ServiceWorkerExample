@@ -19,6 +19,7 @@ export const ConnectionStatusButton = ({ isOnline }) => isOnline
     ? <div className="btn btn-success">online</div>
     : <div className="btn btn-warning">offline</div>
 
-export const SyncButton = ({ onClick, ...props }) => <button className='btn btn-link text-white mx-2' onClick={onClick}>
-    <FontAwesomeIcon icon={faSync} size="2x" {...props} />
-</button>
+export const SyncButton = ({ onClick, active, ...props }) =>
+    <button className={`btn btn-link mx-2 ${active ? 'text-white' : 'text-secondary'}`} onClick={onClick}>
+        <FontAwesomeIcon icon={faSync} size="2x" {...props} />
+    </button>

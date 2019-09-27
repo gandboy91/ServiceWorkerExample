@@ -6,9 +6,8 @@ import {
   LogoutButton,
   SyncButton,
 } from './forms/buttons';
-import { STATUS_ONLINE } from '../constants/connection';
 
-const UserBar = React.memo(({ user: { name, id }, connectionStatus, logoutRequest, pushQueueRequest }) => {
+const UserBar = React.memo(({ user: { name, id }, queueSize, isOnline, logoutRequest, pushQueueRequest }) => {
     const handleLogout = useCallback(() => logoutRequest(), []);
     const handleSync = useCallback(() => pushQueueRequest(), []);
     const buttonProps = {
@@ -28,8 +27,8 @@ const UserBar = React.memo(({ user: { name, id }, connectionStatus, logoutReques
                 <span className="text-light">{id ? `${name}` : `log in please`}</span>
             </div>
             <div className="navbar-brand">
-                <SyncButton onClick={handleSync} />
-                <ConnectionStatusButton isOnline={connectionStatus === STATUS_ONLINE} />
+                <SyncButton onClick={handleSync} active={isOnline && queueSize} />
+                <ConnectionStatusButton isOnline={isOnline} />
             </div>
         </nav>
     );
