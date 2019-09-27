@@ -1,5 +1,5 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faSignInAlt, faSignOutAlt, faHome} from "@fortawesome/free-solid-svg-icons"
+import {faSignInAlt, faSignOutAlt, faHome, faSync} from "@fortawesome/free-solid-svg-icons"
 import { Link } from 'react-router-dom'
 import React from "react"
 
@@ -18,3 +18,7 @@ export const LoginRedirectButton = ({ loginUrl, ...props }) => <Link to={loginUr
 export const ConnectionStatusButton = ({ isOnline }) => isOnline
     ? <div className="btn btn-success">online</div>
     : <div className="btn btn-warning">offline</div>
+
+export const SyncButton = ({ onClick, ...props }) => <button className='btn btn-link text-white mx-2' onClick={onClick}>
+    <FontAwesomeIcon icon={faSync} size="2x" {...props} />
+</button>

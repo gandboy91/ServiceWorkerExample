@@ -1,17 +1,23 @@
 import React, { useEffect } from 'react'
-import {connect} from 'react-redux'
-import {logoutRequest, currentUserRequest} from "../actions/user"
+import { connect } from 'react-redux'
+import { logoutRequest, currentUserRequest } from "../actions/user"
 import UserBar from "../components/UserBar"
-import {getToken, getUser} from "../selectors/user";
+import { getUser } from "../selectors/user";
+import { pushQueue } from '../actions/queue';
 import { selectConnectionStatus } from '../selectors/connection';
 
-const userBarContainer = React.memo(({ user, connectionStatus, logoutRequest, currentUserRequest }) => {
+const userBarContainer = React.memo(({ user, connectionStatus, logoutRequest, pushQueue, currentUserRequest }) => {
     const { id, token } = user
     useEffect(() => {
         token && !id && currentUserRequest()
     }, [token])
 
-    return <UserBar user={user} logoutRequest={logoutRequest} connectionStatus={connectionStatus}/>
+    return <UserBar
+        user={user}
+        pushQueueRequest={pushQueue}
+        logoutRequest={logoutRequest}
+        connectionStatus={connectionStatus}
+    />
 })
 
 const mapStateToProps = (state) => ({
@@ -20,6 +26,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
+    pushQueue,
     logoutRequest,
     currentUserRequest
 }

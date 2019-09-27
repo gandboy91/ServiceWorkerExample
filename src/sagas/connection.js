@@ -3,7 +3,7 @@ import { eventChannel } from 'redux-saga'
 import { setConnectionStatus } from '../actions/connection'
 import { STATUS_OFFLINE, STATUS_ONLINE } from '../constants/connection'
 import { callWorker } from '../helpers/postMessage'
-import { selectQueue } from '../selectors/queue'
+import { selectQueueSize } from '../selectors/queue'
 import { getFromStorage } from '../helpers/storage'
 import { TOKEN_STORAGE_KEY } from '../constants/storage'
 import { getIsIos } from '../selectors/user'
@@ -36,9 +36,8 @@ function* commonCallWorker(status) {
 }
 
 function* iosCallWorker(status) {
-  const queue = yield select(selectQueue)
-  const queueLength = queue.length
-  const text = `you have ${queueLength || 'no'} changes made in offline. ${queueLength ? 'Synchronize ?' : 'Continue ?' }`
+  const queueSize = yield select(selectQueueSize)
+  const text = `you have ${queueSize || 'no'} changes made in offline. ${queueSize ? 'Synchronize ?' : 'Continue ?' }`
 
   if (status === STATUS_ONLINE) {
     yield put(

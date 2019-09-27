@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect } from 'react';
 import {
-  ConnectionStatusButton, HomeButton,
+  ConnectionStatusButton,
+  HomeButton,
   LoginRedirectButton,
   LogoutButton,
+  SyncButton,
 } from './forms/buttons';
 import { STATUS_ONLINE } from '../constants/connection';
 
-const UserBar = React.memo(({ user: { name, id }, connectionStatus, logoutRequest }) => {
+const UserBar = React.memo(({ user: { name, id }, connectionStatus, logoutRequest, pushQueueRequest }) => {
     const handleLogout = useCallback(() => logoutRequest(), []);
+    const handleSync = useCallback(() => pushQueueRequest(), []);
     const buttonProps = {
         style: { color: 'white' },
         size: '2x',
@@ -25,6 +28,7 @@ const UserBar = React.memo(({ user: { name, id }, connectionStatus, logoutReques
                 <span className="text-light">{id ? `${name}` : `log in please`}</span>
             </div>
             <div className="navbar-brand">
+                <SyncButton onClick={handleSync} />
                 <ConnectionStatusButton isOnline={connectionStatus === STATUS_ONLINE} />
             </div>
         </nav>
