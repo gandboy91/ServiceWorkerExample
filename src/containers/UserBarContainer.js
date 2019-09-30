@@ -21,7 +21,7 @@ const userBarContainer = React.memo(
       () => {
         token && !id && currentUserRequest();
       },
-      [token]
+      [ token ]
     );
 
     return (
