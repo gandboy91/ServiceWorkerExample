@@ -5,12 +5,12 @@ import {getCard} from "../selectors/cards";
 import Card from "../components/Card";
 
 const mapDispatchToProps = {
-    changeCardRequest,
-    removeCardRequest
+  changeCardRequest,
+  removeCardRequest
 }
 
-const mapStateToProps = (state, props) => ({
-    card: getCard(state, props)
+const mapStateToProps = (state, { match: { params }}) => ({
+  card: getCard(state, { cardId: params.id })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Card);
