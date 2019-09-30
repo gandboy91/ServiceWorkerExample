@@ -41,18 +41,18 @@ const NewCard = ({ addCardRequest, fieldsValidators }) => {
       <div className='card newCard shadow'>
         <div className="card-header">
           <InputWithAlerts value={title}
-                           placeholder='Enter title'
-                           maxLength={MAX_TITLE_LENGTH}
-                           onChange={changeTitleHandler}
-                           error={getError('title')}
+           placeholder='Enter title'
+           maxLength={MAX_TITLE_LENGTH}
+           onChange={changeTitleHandler}
+           error={getError('title')}
           />
         </div>
         <div className="card-body">
           <TextareaWithAlerts value={text}
-                              placeholder='Enter text'
-                              maxLength={MAX_TEXT_LENGTH}
-                              onChange={changeTextHandler}
-                              error={getError('text')}
+            placeholder='Enter text'
+            maxLength={MAX_TEXT_LENGTH}
+            onChange={changeTextHandler}
+            error={getError('text')}
           />
           <button type="button" className="btn btn-lg btn-secondary mt-3 btn-block" onClick={saveHandler}>
             Save
