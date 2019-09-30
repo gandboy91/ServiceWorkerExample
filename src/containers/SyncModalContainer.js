@@ -4,6 +4,10 @@ import { closeModal } from '../actions/modal';
 import { pushQueue } from '../actions/queue';
 import Modal from '../components/Modal';
 
+/**
+ * Container. Popup for ios (web pushes not working on ios )
+ * on confirm pushes requests queue to server
+ */
 const SyncModalContainer = React.memo(
     ({ text, acceptTitle, declineTitle, isOpen, pushQueue, closeModal }) => {
       const onClose = useCallback(() => {
