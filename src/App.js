@@ -9,7 +9,7 @@ import RegisterPage from './pages/Register'
 import UserPage from './pages/User'
 import MainPage from './pages/Main'
 import UserBarContainer from './containers/UserBarContainer'
-import ModalContainer from './containers/SyncModalContainer'
+import SyncModalContainer from './containers/SyncModalContainer'
 import user from './reducers/user'
 import cards from './reducers/cards'
 import queue from './reducers/queue'
@@ -67,7 +67,7 @@ const App = React.memo(props => {
                             <Route path="/login" component={LoginPage} />
                             <Route component={WrongRoute} />
                         </Switch>
-                        <ModalContainer />
+                        <SyncModalContainer />
                     </div>
                 </Router>
             </div>

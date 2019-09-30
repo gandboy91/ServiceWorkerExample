@@ -15,24 +15,21 @@ const SyncModalContainer = React.memo(
       }, []);
 
       return (
-          <Modal
-              isOpen={isOpen}
-              text={text}
-              acceptTitle={acceptTitle}
-              declineTitle={declineTitle}
-              onAccept={onConfirm}
-              onDecline={onClose}
-          />
+        <Modal
+          isOpen={isOpen}
+          text={text}
+          acceptTitle={acceptTitle}
+          declineTitle={declineTitle}
+          onAccept={onConfirm}
+          onDecline={onClose}
+        />
       );
     }
 );
 
 const mapStateToProps = ({
-                           modal: { text, acceptTitle, declineTitle, open },
-
-
-
-                         }) => ({
+ modal: { text, acceptTitle, declineTitle, open },
+}) => ({
   text,
   acceptTitle,
   declineTitle,
