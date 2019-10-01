@@ -32,12 +32,10 @@ export const addCardRequest = ({ card, onSuccess }) => ({
 })
 
 export const CHANGE_CARD_REQUEST = 'CHANGE_CARD_REQUEST'
-export const changeCardRequest = (id, card) => ({
+export const changeCardRequest = ({ card, onSuccess }) => ({
   type: CHANGE_CARD_REQUEST,
-  payload: {
-    id,
-    card
-  }
+  payload: card,
+  onSuccess,
 })
 
 export const REMOVE_CARD_REQUEST = 'REMOVE_CARD_REQUEST'
@@ -55,6 +53,18 @@ export const addCardOnline = ({ card }) => ({
 export const ADD_CARD_OFFLINE = 'ADD_CARD_OFFLINE'
 export const addCardOffline = ({ card }) => ({
   type: ADD_CARD_OFFLINE,
+  payload: card,
+})
+
+export const CHANGE_CARD_ONLINE = 'CHANGE_CARD_ONLINE'
+export const changeCardOnline = ({ card }) => ({
+  type: CHANGE_CARD_ONLINE,
+  payload: card,
+})
+
+export const CHANGE_CARD_OFFLINE = 'CHANGE_CARD_OFFLINE'
+export const changeCardOffline = ({ card }) => ({
+  type: CHANGE_CARD_OFFLINE,
   payload: card,
 })
 

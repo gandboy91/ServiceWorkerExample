@@ -35,3 +35,5 @@ export const DEFAULT_CARDS = {
         text: 'There are two great days in a person\'s life - the day we are born and the day we discover why.'
     }
 }
+
+export const ADD_CARD_ID_REGEXP = /^add_\d+$/

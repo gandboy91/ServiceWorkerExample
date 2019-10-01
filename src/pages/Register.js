@@ -1,18 +1,18 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import RegisterFormContainer from '../containers/RegisterFormContainer'
-import { Redirect } from 'react-router-dom'
+import React from 'react';
+import { connect } from 'react-redux';
+import RegisterFormContainer from '../containers/RegisterFormContainer';
+import { Redirect } from 'react-router-dom';
 
 const RegisterPage = React.memo(({ token }) => {
-    if (token) {
-        return <Redirect to='/' />
-    }
+  if (token) {
+    return <Redirect to="/" />;
+  }
 
-    return <RegisterFormContainer />
-})
+  return <RegisterFormContainer />;
+});
 
 const mapStateToProps = ({ user: { token } }) => ({
-    token
-})
+  token,
+});
 
-export default connect(mapStateToProps)(RegisterPage)
+export default connect(mapStateToProps)(RegisterPage);

@@ -1,7 +1,5 @@
-import {get, getWithToken} from ".";
-import {isObject} from "../helpers/types";
-import {AUTH_ERROR_KEY} from "../constants/validation";
+import { getWithToken } from '.';
 
-export const getUserByToken = () => getWithToken({ url: 'user' })
+export const getUserByToken = () => getWithToken({ url: 'user' });
 
-export const getUserById = id => getWithToken({ url: `users/${id}` })
+export const getUserById = (id) => getWithToken({ url: `users/${id}` });

@@ -1,16 +1,18 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import { changeCardRequest, removeCardRequest } from "../actions/cards"
-import {getCard} from "../selectors/cards";
-import Card from "../components/Card";
+import { connect } from 'react-redux';
+import { changeCardRequest, removeCardRequest } from '../actions/cards';
+import { getCard } from '../selectors/cards';
+import Card from '../components/Card';
 
 const mapDispatchToProps = {
   changeCardRequest,
-  removeCardRequest
-}
+  removeCardRequest,
+};
 
-const mapStateToProps = (state, { match: { params }}) => ({
-  card: getCard(state, { cardId: params.id })
+const mapStateToProps = (state, { match: { params } }) => ({
+  card: getCard(state, { cardId: params.id }),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Card);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Card);

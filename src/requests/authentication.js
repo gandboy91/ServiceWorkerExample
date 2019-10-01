@@ -1,7 +1,7 @@
-import {post} from ".";
-import {isObject} from "../helpers/types";
-import {AUTH_ERROR_KEY} from "../constants/validation";
+import { post } from '.';
 
-export const login = ({ email, password }) => post({ url: 'login', body: { email, password }})
+export const login = ({ email, password }) =>
+  post({ url: 'login', body: { email, password } });
 
-export const register = ({ email, password, name }) => post({ url: 'register', params: { email, password, name }})
+export const register = ({ email, password, name }) =>
+  post({ url: 'register', params: { email, password, name } });

@@ -32,7 +32,7 @@ const NewCard = ({ addCardRequest, fieldsValidators }) => {
         onSuccess: setComplete
       })
     }
-  },[title, text])
+  },[ title, text ])
 
   return complete
     ? <Redirect to='/' />

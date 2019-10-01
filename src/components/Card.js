@@ -44,11 +44,13 @@ const Card = React.memo(
     const saveHandler = useCallback(
       () => {
         if (validate({ title, text })) {
-          changeCardRequest(id, { title, text });
-          setComplete(true);
+          changeCardRequest({
+            card: { id, title, content: text },
+            onSuccess: setComplete
+          });
         }
       },
-        [title, text]
+        [ title, text ]
     );
 
     return complete ? (

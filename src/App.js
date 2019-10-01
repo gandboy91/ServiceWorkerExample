@@ -17,7 +17,7 @@ import modal from './reducers/modal'
 import connection from './reducers/connection'
 import { createStore, applyMiddleware } from 'redux'
 import PrivateRoute from './components/common/PrivateRoute'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './styles/app.css'
 import {ADMIN_ACCESS_LEVEL} from "./constants/access"
 import Card from './pages/Card'

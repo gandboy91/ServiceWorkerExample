@@ -1,18 +1,18 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import LoginFormContainer from '../containers/LoginFormContainer'
-import { Redirect } from 'react-router-dom'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import LoginFormContainer from '../containers/LoginFormContainer';
 
 const LoginPage = React.memo(({ token }) => {
-    if (token) {
-        return <Redirect to='/' />
-    }
+  if (token) {
+    return <Redirect to="/" />;
+  }
 
-    return <LoginFormContainer />
-})
+  return <LoginFormContainer />;
+});
 
 const mapStateToProps = ({ user: { token } }) => ({
-    token
-})
+  token,
+});
 
-export default connect(mapStateToProps)(LoginPage)
+export default connect(mapStateToProps)(LoginPage);
