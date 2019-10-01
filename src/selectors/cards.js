@@ -1,21 +1,23 @@
-import { createSelector } from 'reselect'
+import { createSelector } from 'reselect';
 
-const getCards = ({ cards }) => cards.cards
+const getCards = ({ cards }) => cards.cards;
 
-const getOfflineCards = ({ cards }) => cards.offlineCards
+const getOfflineCards = ({ cards }) => cards.offlineCards;
 
-export const getCard = ({ cards }, { cardId }) => cards.cards[cardId] || cards.offlineCards[cardId] || null
+export const getCard = ({ cards }, { cardId }) =>
+  cards.cards[cardId] || cards.offlineCards[cardId] || null;
 
-export const getOfflineCard = ({ cards }, { cardId }) => cards.offlineCards[cardId] || null
+export const getOfflineCard = ({ cards }, { cardId }) =>
+  cards.offlineCards[cardId] || null;
 
-export const getCardsIsProcessing = ({ cards }) => cards.isProcessing
+export const getCardsIsProcessing = ({ cards }) => cards.isProcessing;
 
 export const getCardsIds = createSelector(
-    [ getCards ],
-    cards => Object.keys(cards).map( id => +id)
-)
+  [getCards],
+  (cards) => Object.keys(cards).map((id) => +id)
+);
 
 export const getOfflineCardsIds = createSelector(
-    [ getOfflineCards ],
-    offlineCards => Object.keys(offlineCards) || []
-)
+  [getOfflineCards],
+  (offlineCards) => Object.keys(offlineCards) || []
+);

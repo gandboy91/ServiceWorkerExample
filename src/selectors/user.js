@@ -1,12 +1,12 @@
-import {createSelector} from "reselect"
+import { createSelector } from 'reselect';
 
-export const getToken = ({ user: {token} }) => token
+export const getToken = ({ user: { token } }) => token;
 
-export const getUser = ({ user }) => user.user
+export const getUser = ({ user }) => user.user;
 
 export const getUserRole = createSelector(
-    [ getUser ],
-    ({ role }) => role
-)
+  [getUser],
+  ({ role }) => role
+);
 
-export const getIsIos = ({ user }) => user.isIos
+export const getIsIos = ({ user }) => user.isIos;

@@ -72,12 +72,12 @@ function* editCardOffline({ id, ...card }) {
   const isAddingRequest = ADD_CARD_ID_REGEXP.test(id);
   yield put(changeCardOffline({ card: getPreparedCard({ ...card, id }) }));
   yield put(
-      addToQueue({
-        key: isAddingRequest ? id : `edit_${id}`,
-        url: isAddingRequest ? SAVE_CARD_URL : getCardUrl(id),
-        method: isAddingRequest ? 'POST' : 'PUT',
-        body: card,
-      })
+    addToQueue({
+      key: isAddingRequest ? id : `edit_${id}`,
+      url: isAddingRequest ? SAVE_CARD_URL : getCardUrl(id),
+      method: isAddingRequest ? 'POST' : 'PUT',
+      body: card,
+    })
   );
 }
 
@@ -90,12 +90,12 @@ function* saveCardOffline(card) {
   const id = uniqueId('add_');
   yield put(addCardOffline({ card: getPreparedCard({ ...card, id }) }));
   yield put(
-      addToQueue({
-        key: id,
-        url: SAVE_CARD_URL,
-        method: 'POST',
-        body: card,
-      })
+    addToQueue({
+      key: id,
+      url: SAVE_CARD_URL,
+      method: 'POST',
+      body: card,
+    })
   );
 }
 
@@ -109,12 +109,12 @@ function* deleteCardOffline(id) {
   if (card) {
     yield put(removeCardOnline({ id }));
     return yield put(
-        addToQueue({
-          key: `remove_${id}`,
-          url: getCardUrl(id),
-          method: 'DELETE',
-          body: null,
-        })
+      addToQueue({
+        key: `remove_${id}`,
+        url: getCardUrl(id),
+        method: 'DELETE',
+        body: null,
+      })
     );
   }
   yield put(removeCardOffline({ id }));
