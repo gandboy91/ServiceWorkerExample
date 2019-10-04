@@ -12,19 +12,13 @@ const PreviewOfflineCard = React.memo(
     return (
       <div className="card previewCard offline shadow">
         <div className="card-header">
-          <div className="row">
-            <div className="col-sm-10">
-              <h5>{title}</h5>
-            </div>
-            <div className="col-sm-2">
-              <FontAwesomeIcon
-                size="2x"
-                icon={faTimes}
-                className="faIcon"
-                onClick={handleRemove}
-              />
-            </div>
-          </div>
+          <FontAwesomeIcon
+            size="2x"
+            icon={faTimes}
+            className="faIcon float-right"
+            onClick={handleRemove}
+          />
+          <h5>{title}</h5>
         </div>
         <div className="card-body">
           <div className="mb-2">{text}</div>

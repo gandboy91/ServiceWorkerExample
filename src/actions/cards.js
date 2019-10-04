@@ -41,7 +41,7 @@ export const changeCardRequest = ({ card, onSuccess }) => ({
 export const REMOVE_CARD_REQUEST = 'REMOVE_CARD_REQUEST'
 export const removeCardRequest = id => ({
   type: REMOVE_CARD_REQUEST,
-  payload: id
+  payload: id,
 })
 
 export const ADD_CARD_ONLINE = 'ADD_CARD_ONLINE'

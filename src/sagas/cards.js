@@ -27,7 +27,7 @@ import { getPreparedCard, getPreparedCards } from '../helpers/cards';
 import { selectIsOnline } from '../selectors/connection';
 import { addToQueue, removeFromQueue } from '../actions/queue';
 import { SAVE_CARD_URL } from '../constants/urls';
-import { getCard } from '../selectors/cards';
+import { getOnlineCard } from '../selectors/cards';
 import { getCardUrl } from '../helpers/urls';
 import { ADD_CARD_ID_REGEXP } from '../constants/cards';
 
@@ -105,8 +105,8 @@ function* deleteCardOnline(id) {
 }
 
 function* deleteCardOffline(id) {
-  const card = yield select(getCard, { cardId: id });
-  if (card) {
+  const onlineCard = yield select(getOnlineCard, { cardId: id });
+  if (onlineCard) {
     yield put(removeCardOnline({ id }));
     return yield put(
       addToQueue({
