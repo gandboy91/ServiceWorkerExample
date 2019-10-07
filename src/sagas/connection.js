@@ -8,6 +8,7 @@ import { getFromStorage } from '../helpers/storage';
 import { TOKEN_STORAGE_KEY } from '../constants/storage';
 import { getIsIos } from '../selectors/user';
 import { openModal } from '../actions/modal';
+import { API_KEY } from '../constants/keys';
 
 function connectionEventsChannel() {
   return eventChannel((emit) => {
@@ -31,7 +32,7 @@ function* commonCallWorker(status) {
   const token = getFromStorage(TOKEN_STORAGE_KEY);
   yield call(callWorker, {
     type: status,
-    payload: status === STATUS_ONLINE ? { queue, token } : {},
+    payload: status === STATUS_ONLINE ? { queue, token, apiKey: API_KEY } : {},
   });
 }
 

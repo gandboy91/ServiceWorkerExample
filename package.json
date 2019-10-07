@@ -26,6 +26,8 @@
     "babel-eslint": "^10.0.3",
     "bootstrap-css-only": "^4.3.1",
     "clean-webpack-plugin": "^2.0.1",
+    "copy-webpack-plugin": "^5.0.4",
+    "dotenv-webpack": "^1.7.0",
     "crypto-js": "^3.1.9-1",
     "css-loader": "^2.1.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",

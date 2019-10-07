@@ -34,7 +34,7 @@ let token = '';
  * noveo rest api key
  * @type {string}
  */
-const apiKey = 'A5SGjUFIoIRjq8emwERicmNac63ozOVHOL3hx5PT';
+let apiKey = '';
 
 /**
  * methods which aren't supposed to be cached
@@ -209,8 +209,9 @@ const buildQueueResponse = (request) => {
   return new Promise((resolve, reject) => {
     const clonedRequest = request.clone();
     clonedRequest.json().then((body) => {
-      queue = body.queue;
-      token = body.token;
+      queue = body.queue || [];
+      token = body.token || '';
+      apiKey = body.apiKey || '';
       return fetchQueue()
         .then(() => resolve(getSuccessMockResponse()))
         .catch(() => reject(new Error('error while processing queue')));
@@ -466,8 +467,9 @@ self.addEventListener(
       case OFFLINE_TYPE:
         return pushOfflineNotification();
       case ONLINE_TYPE:
-        queue = data.payload.queue || {};
+        queue = data.payload.queue || [];
         token = data.payload.token || '';
+        apiKey = data.payload.apiKey || '';
         return pushOnlineNotification(queue);
       default:
     }
