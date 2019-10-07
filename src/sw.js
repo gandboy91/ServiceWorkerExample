@@ -34,7 +34,7 @@ let token = '';
  * noveo rest api key
  * @type {string}
  */
-const apiKey = 'BnyJAR5gosdRqQkZQ3HMXoWdJWsljC6xPmu1qa56';
+const apiKey = 'A5SGjUFIoIRjq8emwERicmNac63ozOVHOL3hx5PT';
 
 /**
  * methods which aren't supposed to be cached
