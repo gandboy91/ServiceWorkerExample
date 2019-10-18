@@ -24,6 +24,5 @@ export const saveToStorage = (key, value) =>
  * @returns {any}
  */
 export const getFromStorage = (key) => {
-  console.log(1);
   return storageIsAvailable() && JSON.parse(localStorage.getItem(key));
 };
