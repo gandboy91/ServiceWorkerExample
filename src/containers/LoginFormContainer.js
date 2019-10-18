@@ -1,15 +1,18 @@
-import React, { useCallback } from 'react'
-import {connect} from 'react-redux'
-import { loginRequest } from "../actions/user";
-import LoginForm from "../components/LoginForm"
+import React, { useCallback } from 'react';
+import { connect } from 'react-redux';
+import { loginRequest } from '../actions/user';
+import LoginForm from '../components/LoginForm';
 
 const mapStateToProps = ({ user: { errors, isProcessing } }) => ({
-    errors,
-    isProcessing
+  errors,
+  isProcessing,
 });
 
 const mapDispatchToProps = {
-    loginRequest
-}
+  loginRequest,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginForm);
