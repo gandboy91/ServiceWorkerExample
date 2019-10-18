@@ -60,6 +60,12 @@ const ROUTE_REGEXP = /^([\w]+\/?)+$/;
 const LOGIN_REGEXP = /api\/v1\/login\/?$/;
 
 /**
+ * regexp to find out if it's "subscribe" request
+ * @type {RegExp}
+ */
+const SUBSCRIBE_REGEXP = /api\/v1\/subscribe\/?$/;
+
+/**
  * regexps for routes which are supposed to be saved
  * @type {RegExp[]}
  */
@@ -67,6 +73,52 @@ const postRegexpsToSave = [LOGIN_REGEXP];
 
 const STATIC_CACHE = 'staticCache';
 const DYNAMIC_CACHE = 'dynamicCache';
+
+const postSubscription = ({ url, headers, subscription }) => {
+  const { keys, endpoint } = subscription;
+  const { auth: authToken, p256dh: publicKey } = keys;
+  const body = JSON.stringify({
+    'auth_token': authToken,
+    'public_key': publicKey,
+    'content_encoding': "aesgcm",
+    endpoint,
+  });
+  return fetch(url, {
+    headers,
+    method: 'POST',
+    body,
+  });
+}
+
+/**
+ * @param request
+ * @return {Promise}
+ */
+const manageSubscription = (request) =>
+  new Promise((resolve, reject) => {
+    const { pushManager } = self.registration;
+    pushManager.getSubscription().then((oldSubscription) => {
+      oldSubscription && oldSubscription.unsubscribe();
+      const clonedRequest = request.clone();
+      const { url, headers } = clonedRequest;
+      clonedRequest.json().then(({ vapidPublicKey = '' }) => {
+        pushManager
+          .subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: vapidPublicKey,
+          })
+          .then((subscription) =>
+            resolve(
+              postSubscription({
+                url,
+                headers,
+                subscription: subscription.toJSON(),
+              })
+            )
+          );
+      });
+    });
+  });
 
 /**
  * returns response for OPTIONS request for correct CORS-mode requests work
@@ -202,7 +254,7 @@ const buildResponseFromDbRecord = ({ blob, contentType }) =>
  * @param request
  * @return {Promise}
  */
-const buildQueueResponse = (request) => {
+const manageQueue = (request) => {
   if (request.method === 'OPTIONS') {
     return new Promise((resolve, reject) => resolve(getPreflightResponse()));
   }
@@ -280,7 +332,7 @@ const buildResponse = (request) =>
  * For limiting in time root requests which are not redirected (like get `/login`)
  * Usually it's server job, but in our case.. I'm too lazy to set up server with complex config
  */
-const buildLimitingGetResponse = () =>
+const getLimitingResponse = () =>
   new Promise((resolve, reject) => setTimeout(resolve, 1000, new Response()));
 
 /**
@@ -477,6 +529,14 @@ self.addEventListener(
   false
 );
 
+self.addEventListener(
+  'push',
+  ({ data = {} }) => {
+    console.log(data.text());
+  },
+  false
+);
+
 /**
  * listens notification click action
  */
@@ -503,17 +563,18 @@ self.addEventListener(
  */
 const processRequest = (event) => {
   const { request } = event;
-
-  if (PUSH_QUEUE_REGEXP.test(request.url)) {
-    return event.respondWith(buildQueueResponse(request));
+  switch (true) {
+    case PUSH_QUEUE_REGEXP.test(request.url):
+      return event.respondWith(manageQueue(request));
+    case SUBSCRIBE_REGEXP.test(request.url):
+      return event.respondWith(manageSubscription(request));
+    default:
+      return request.method === 'POST'
+        ? event.respondWith(buildPostResponse(request))
+        : event.respondWith(
+            Promise.race([buildResponse(request), getLimitingResponse()])
+          );
   }
-  if (request.method === 'POST') {
-    return event.respondWith(buildPostResponse(request));
-  }
-
-  return event.respondWith(
-    Promise.race([buildResponse(request), buildLimitingGetResponse()])
-  );
 };
 
 /**

@@ -10,9 +10,13 @@ import {
   setUser,
 } from '../actions/user';
 import { login, register } from '../requests/authentication';
-import { getUserByToken } from '../requests/user';
-import { saveToStorage } from '../helpers/storage';
-import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY } from '../constants/storage';
+import { getUserByToken, subscribe } from '../requests/user';
+import { saveToStorage, getFromStorage } from '../helpers/storage';
+import {
+  TOKEN_STORAGE_KEY,
+  USER_STORAGE_KEY,
+  VAPID_STORAGE_KEY,
+} from '../constants/storage';
 import { startFetching, stopFetching } from '../actions';
 import { AUTH_ERROR_KEY } from '../constants/validation';
 import { getIsIos } from '../selectors/user';
@@ -30,10 +34,10 @@ function* authorizeWorker({ payload: { email, password } }) {
       yield call(requestNotificationsPermission);
     }
     yield put(startFetching);
-    const { token } = yield call(login, { email, password });
+    const { token, vapidPublicKey } = yield call(login, { email, password });
     saveToStorage(TOKEN_STORAGE_KEY, token || '');
     yield put(loginSuccess(token));
-    yield call(getCurrentUser);
+    yield all([call(manageSubscription, vapidPublicKey), call(getCurrentUser)]);
   } catch (error) {
     console.warn(error.message || error);
     yield put(
@@ -44,6 +48,18 @@ function* authorizeWorker({ payload: { email, password } }) {
     );
   } finally {
     yield put(stopFetching);
+  }
+}
+
+function* manageSubscription(vapidPublicKey) {
+  const vapidKeyFromStorage = getFromStorage(VAPID_STORAGE_KEY);
+  if (vapidPublicKey === vapidKeyFromStorage) {
+    return;
+  }
+  try {
+    yield call(subscribe, vapidPublicKey);
+  } catch (error) {
+    console.warn(error.message || error);
   }
 }
 
