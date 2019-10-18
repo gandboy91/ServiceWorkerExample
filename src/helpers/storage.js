@@ -3,11 +3,11 @@
  * @returns {boolean}
  */
 const storageIsAvailable = () => {
-    if (!localStorage) {
-        throw 'Storage is unavailible'
-    }
-    return true
-}
+  if (!localStorage) {
+    throw 'Storage is unavailible';
+  }
+  return true;
+};
 
 /**
  * save to storage value with given key
@@ -15,17 +15,15 @@ const storageIsAvailable = () => {
  * @param value
  * @returns {boolean|void}
  */
-export const saveToStorage = (key, value) => storageIsAvailable()
-    && localStorage.setItem(key, JSON.stringify(value))
+export const saveToStorage = (key, value) =>
+  storageIsAvailable() && localStorage.setItem(key, JSON.stringify(value));
 
 /**
  * gets value from storage
  * @param key
  * @returns {any}
  */
-export const getFromStorage = key => {
-    console.log(1)
-return storageIsAvailable()
-    && JSON.parse(localStorage.getItem(key))
-
-}
+export const getFromStorage = (key) => {
+  console.log(1);
+  return storageIsAvailable() && JSON.parse(localStorage.getItem(key));
+};
