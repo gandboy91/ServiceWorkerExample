@@ -55,7 +55,7 @@ const PreviewCard = React.memo(
                 <FontAwesomeIcon icon={faEdit} size="2x" />
               </Link>
             ) : (
-              <span>&nbsp</span>
+              <span>&nbsp;</span>
             )}
             <LikeCounter likes={likes} onClick={handleLike} />
           </div>

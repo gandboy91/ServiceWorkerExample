@@ -63,13 +63,13 @@ function* manageSubscription(vapidPublicKey) {
   }
 }
 
-function* registerWorker({ payload: { name, email, password } }) {
+function* registerWorker({ payload: { name, email, lastName, password } }) {
   try {
     yield put(startFetching);
     const {
       token,
       user: { created_at, updated_at, ...user },
-    } = yield call(register, { email, password, name });
+    } = yield call(register, { email, password, name, lastName });
     saveToStorage(TOKEN_STORAGE_KEY, token || '');
     saveToStorage(USER_STORAGE_KEY, user || {});
     yield put(loginSuccess(token));

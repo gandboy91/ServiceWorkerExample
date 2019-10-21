@@ -28,7 +28,7 @@ const PreviewOfflineCard = React.memo(
                 <FontAwesomeIcon icon={faEdit} size="2x" />
               </Link>
             ) : (
-              <span>&nbsp</span>
+              <span>&nbsp;</span>
             )}
             <div className="rounded p-2 alert-warning mb-0">
               no likes in offline
