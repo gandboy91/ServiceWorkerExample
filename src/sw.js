@@ -74,31 +74,33 @@ const postRegexpsToSave = [LOGIN_REGEXP];
 const STATIC_CACHE = 'staticCache';
 const DYNAMIC_CACHE = 'dynamicCache';
 
-const postSubscription = ({ url, headers, subscription }) => {
-  const { keys, endpoint } = subscription;
-  const { auth: authToken, p256dh: publicKey } = keys;
-  const body = JSON.stringify({
-    'auth_token': authToken,
-    'public_key': publicKey,
-    'content_encoding': "aesgcm",
-    endpoint,
-  });
-  return fetch(url, {
+/**
+ * makes post request with given subscription
+ * @param url
+ * @param headers
+ * @param subscription
+ * @return {Promise<Response>}
+ */
+const postSubscription = ({ url, headers, subscription }) =>
+  fetch(url, {
     headers,
     method: 'POST',
-    body,
+    body: JSON.stringify(subscription),
   });
-}
 
 /**
+ * Manages subscription request, sends subscription object to api.
+ * Unsubscribe if there's existing subscription
  * @param request
  * @return {Promise}
  */
-const manageSubscription = (request) =>
+const manageSubscriptionRequest = (request) =>
   new Promise((resolve, reject) => {
     const { pushManager } = self.registration;
     pushManager.getSubscription().then((oldSubscription) => {
-      oldSubscription && oldSubscription.unsubscribe();
+      if (oldSubscription) {
+        oldSubscription.unsubscribe();
+      }
       const clonedRequest = request.clone();
       const { url, headers } = clonedRequest;
       clonedRequest.json().then(({ vapidPublicKey = '' }) => {
@@ -225,6 +227,34 @@ const pushOfflineNotification = () =>
       { action: 'fck', title: 'f*ck' },
       { action: 'ok', title: 'no problem' },
     ],
+  });
+
+/**
+ * pushes simple notification with title and body
+ * @param title
+ * @param body
+ */
+const pushSimpleNotification = ({ title, body }) =>
+  self.registration.showNotification(title, {
+    body,
+  });
+
+/**
+ * push notification when someone liked your post
+ */
+const pushLikeNotification = (message) =>
+  pushSimpleNotification({
+    title: 'Your post was liked',
+    body: `Your post "${message.post}" was liked by ${message.from_user || ''}`,
+  });
+
+/**
+ * push notification when someone created a post
+ */
+const pushPostCreatedNotification = (message) =>
+  pushSimpleNotification({
+    title: 'New post was created',
+    body: `New post "${message.post || ''}" was created by ${message.user || ''}`,
   });
 
 /**
@@ -529,10 +559,25 @@ self.addEventListener(
   false
 );
 
+/**
+ * handles push event
+ */
 self.addEventListener(
   'push',
   ({ data = {} }) => {
-    console.log(data.text());
+    if (!data.text || typeof data.text !== 'function') {
+      return false;
+    }
+    console.log(data.text())
+    const { data: message = {} } = JSON.parse(data.text());
+    switch (message.type) {
+      case 'post.like':
+        return pushLikeNotification(message);
+      case 'post.created':
+        return pushPostCreatedNotification(message);
+      default:
+        return false;
+    }
   },
   false
 );
@@ -544,7 +589,6 @@ self.addEventListener(
   'notificationclick',
   (event) => {
     event.notification.close();
-
     switch (event.action) {
       case 'sync':
         return fetchQueue().then(refreshClients());
@@ -567,7 +611,7 @@ const processRequest = (event) => {
     case PUSH_QUEUE_REGEXP.test(request.url):
       return event.respondWith(manageQueue(request));
     case SUBSCRIBE_REGEXP.test(request.url):
-      return event.respondWith(manageSubscription(request));
+      return event.respondWith(manageSubscriptionRequest(request));
     default:
       return request.method === 'POST'
         ? event.respondWith(buildPostResponse(request))
