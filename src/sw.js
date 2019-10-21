@@ -568,7 +568,6 @@ self.addEventListener(
     if (!data.text || typeof data.text !== 'function') {
       return false;
     }
-    console.log(data.text())
     const { data: message = {} } = JSON.parse(data.text());
     switch (message.type) {
       case 'post.like':
