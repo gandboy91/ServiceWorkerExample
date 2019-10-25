@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { getOfflineCard } from '../selectors/cards';
 import PreviewOfflineCard from '../components/PreviewOfflineCard';

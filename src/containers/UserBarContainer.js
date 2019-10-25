@@ -9,28 +9,23 @@ import { selectQueueSize } from '../selectors/queue';
 
 const userBarContainer = React.memo(
   ({
-     user,
-     isOnline,
-     pushQueue,
-     queueSize,
-     logoutRequest,
-     currentUserRequest,
-   }) => {
+    user,
+    isOnline,
+    queueSize,
+    logoutRequest: logout,
+    pushQueue: pushQueueRequest,
+    currentUserRequest: userRequest,
+  }) => {
     const { id, token } = user;
-    useEffect(
-      () => {
-        token && !id && currentUserRequest();
-      },
-      [ token ]
-    );
+    useEffect(() => token && !id && userRequest(), [token]);
 
     return (
       <UserBar
         user={user}
         isOnline={isOnline}
         queueSize={queueSize}
-        pushQueueRequest={pushQueue}
-        logoutRequest={logoutRequest}
+        pushQueueRequest={pushQueueRequest}
+        logoutRequest={logout}
       />
     );
   }
@@ -49,6 +44,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(userBarContainer);

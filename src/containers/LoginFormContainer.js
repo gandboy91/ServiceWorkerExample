@@ -1,4 +1,3 @@
-import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { loginRequest } from '../actions/user';
 import LoginForm from '../components/LoginForm';

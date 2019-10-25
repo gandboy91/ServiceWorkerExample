@@ -9,30 +9,35 @@ import Modal from '../components/Modal';
  * on confirm pushes requests queue to server
  */
 const SyncModalContainer = React.memo(
-    ({ text, acceptTitle, declineTitle, isOpen, pushQueue, closeModal }) => {
-      const onClose = useCallback(() => {
-        closeModal();
-      }, []);
-      const onConfirm = useCallback(() => {
-        pushQueue();
-        closeModal();
-      }, []);
+  ({
+    isOpen,
+    text,
+    acceptTitle,
+    declineTitle,
+    pushQueue: pushRequestQueue,
+    closeModal: close,
+  }) => {
+    const onClose = useCallback(() => closeModal(), []);
+    const onConfirm = useCallback(() => {
+      pushRequestQueue();
+      close();
+    }, []);
 
-      return (
-        <Modal
-          isOpen={isOpen}
-          text={text}
-          acceptTitle={acceptTitle}
-          declineTitle={declineTitle}
-          onAccept={onConfirm}
-          onDecline={onClose}
-        />
-      );
-    }
+    return (
+      <Modal
+        isOpen={isOpen}
+        text={text}
+        acceptTitle={acceptTitle}
+        declineTitle={declineTitle}
+        onAccept={onConfirm}
+        onDecline={onClose}
+      />
+    );
+  }
 );
 
 const mapStateToProps = ({
- modal: { text, acceptTitle, declineTitle, open },
+  modal: { text, acceptTitle, declineTitle, open },
 }) => ({
   text,
   acceptTitle,
@@ -46,6 +51,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(SyncModalContainer);
